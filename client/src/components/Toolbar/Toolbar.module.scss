@@ -1,0 +1,27 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  &__btn {
+    width: 25px;
+    height: 25px;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 10px;
+
+    &_right {
+      margin-left: auto;
+    }
+  }
+
+  &__colorPicker {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+    cursor: pointer;
+  }
+}

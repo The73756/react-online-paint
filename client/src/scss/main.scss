@@ -1,3 +1,6 @@
+@import './vars';
+@import './reset';
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -15,7 +18,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100%;
+  max-width: 100vw;
   font-size: 16px;
+  background-color: var(--bg-color);
 }
 
 img {
@@ -26,38 +31,6 @@ img {
 
 a {
   text-decoration: none;
-}
-
-.is-hidden {
-  display: none !important; /* stylelint-disable-line declaration-no-important */
-}
-
-.btn-reset {
-  border: none;
-  padding: 0;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.list-reset {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.input-reset {
-  -webkit-appearance: none;
-  appearance: none;
-  border: none;
-  border-radius: 0;
-  background-color: #fff;
-
-  &::-webkit-search-decoration,
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-results-button,
-  &::-webkit-search-results-decoration {
-    display: none;
-  }
 }
 
 .visually-hidden {
@@ -75,10 +48,6 @@ a {
   margin: 0 auto;
   padding: 0 var(--container-offset);
   max-width: var(--container-width);
-}
-
-.js-focus-visible :focus:not(.focus-visible) {
-  outline: none;
 }
 
 .centered {

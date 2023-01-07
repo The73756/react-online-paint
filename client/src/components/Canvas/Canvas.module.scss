@@ -1,0 +1,14 @@
+.canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 80px);
+
+  &__inner {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 100%;
+    height: calc(100% - 40px);
+    background-color: #fff;
+  }
+}

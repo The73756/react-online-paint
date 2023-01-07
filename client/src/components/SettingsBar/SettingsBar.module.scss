@@ -1,0 +1,10 @@
+@import '../../scss/reset';
+
+.settingBar {
+  display: flex;
+  gap: 10px;
+
+  &__input {
+    @extend .input-reset;
+  }
+}

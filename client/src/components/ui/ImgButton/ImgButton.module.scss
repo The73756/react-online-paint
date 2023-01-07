@@ -1,0 +1,9 @@
+@import '../../../scss/reset';
+
+.imgBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @extend .btn-reset;
+}

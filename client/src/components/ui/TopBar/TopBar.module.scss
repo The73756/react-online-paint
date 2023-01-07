@@ -1,0 +1,13 @@
+.topBar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eaeaea;
+  width: 100%;
+  height: var(--toolbar-height);
+  box-shadow: 0 4px 5px #eaeaea;
+  background-color: #fff;
+
+  &__inner {
+    width: 100%;
+  }
+}
