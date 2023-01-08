@@ -1,0 +1,18 @@
+@import '../../../scss/reset';
+
+.colorPicker {
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #97df97;
+    background-color: #e8fee8;
+  }
+
+  @extend .input-reset;
+}

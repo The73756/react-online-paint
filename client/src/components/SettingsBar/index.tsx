@@ -3,6 +3,7 @@ import TopBar from '../ui/TopBar';
 
 import styles from './SettingsBar.module.scss';
 import toolState from '../../store/toolState';
+import ColorPicker from '../ui/ColorPicker';
 
 const SettingsBar: FC = () => {
   const [value, setValue] = useState(1);
@@ -21,10 +22,14 @@ const SettingsBar: FC = () => {
     toolState.setLineWidth(value);
   };
 
+  const changeColor = (e: ChangeEvent<HTMLInputElement>) => {
+    toolState.setStrokeColor(e.target.value);
+  };
+
   return (
     <TopBar>
       <div className={styles.settingBar}>
-        <label htmlFor="lineWidth">Толщина линии</label>
+        <label htmlFor="lineWidth">Толщина линии:</label>
         <input
           id="lineWidth"
           className={styles.settingBar__input}
@@ -33,6 +38,13 @@ const SettingsBar: FC = () => {
           type="number"
           min={1}
           max={50}
+        />
+        <label htmlFor="lineColor">Цвет линии:</label>
+        <ColorPicker
+          id="lineColor"
+          onChange={changeColor}
+          aria-label="Выбрать цвет линии"
+          title="Цвет линии"
         />
       </div>
     </TopBar>

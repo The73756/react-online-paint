@@ -1,5 +1,6 @@
 import { CanvasType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
+import toolState from '../store/toolState';
 
 export default class Tool {
   public canvas: CanvasType;
@@ -10,6 +11,12 @@ export default class Tool {
     this.canvas = canvas;
     this.ctx = this.canvas?.getContext('2d');
     this.destroyEvents();
+
+    if (this.ctx) {
+      this.ctx.fillStyle = toolState.currentFillColor;
+      this.ctx.strokeStyle = toolState.currentStrokeColor;
+      this.ctx.lineWidth = toolState.currentLineWidth;
+    }
   }
 
   set fillColor(color: string) {

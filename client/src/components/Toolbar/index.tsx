@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import TopBar from '../ui/TopBar';
 import ImgButton from '../ui/ImgButton';
 import { ReactComponent as BrushImg } from '../../assets/image/brush.svg';
@@ -20,9 +20,16 @@ import { observer } from 'mobx-react-lite';
 
 import styles from './Toolbar.module.scss';
 import { ToolNames } from '../../types/tools';
+import ColorPicker from '../ui/ColorPicker';
 
 const Toolbar: FC = observer(() => {
   const currentToolName = toolState.currentToolName;
+
+  const changeColor = (e: ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value;
+
+    toolState.setFillColor(color);
+  };
 
   return (
     <TopBar>
@@ -68,11 +75,10 @@ const Toolbar: FC = observer(() => {
             active={currentToolName === ToolNames.ERASER}>
             <EraserImg />
           </ImgButton>
-          <input
-            type="color"
-            className={styles.toolbar__colorPicker}
-            aria-label="Выбрать цвет"
-            title="Изменить цвет"
+          <ColorPicker
+            onChange={changeColor}
+            aria-label="Выбрать цвет заливки"
+            title="Цвет заливки"
           />
         </div>
         <div className={`${styles.toolbar__btns} ${styles.toolbar__btns_right}`}>
