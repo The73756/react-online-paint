@@ -85,12 +85,14 @@ const Toolbar: FC = observer(() => {
           <ImgButton
             className={styles.toolbar__btn}
             aria-label="Отменить предыдущее действие"
+            onClick={() => canvasState.undo()}
             title="Отменить">
             <UndoImg />
           </ImgButton>
           <ImgButton
             className={styles.toolbar__btn}
             aria-label="Вернуть предыдущее действие"
+            onClick={() => canvasState.redo()}
             title="Вернуть">
             <RedoImg />
           </ImgButton>

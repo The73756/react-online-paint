@@ -11,15 +11,41 @@ const Canvas: FC = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+    document.addEventListener('keypress', keyPressHandler);
 
     if (canvasRef.current) {
       toolState.setTool(new Brush(canvasRef.current));
     }
+
+    return () => {
+      document.removeEventListener('keypress', keyPressHandler);
+    };
   }, []);
+
+  const keyPressHandler = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.code === 'KeyZ') {
+      canvasState.undo();
+    }
+
+    if (e.ctrlKey && e.code === 'KeyY') {
+      canvasState.redo();
+    }
+  };
+
+  const mouseDownHandler = () => {
+    if (canvasRef.current) {
+      canvasState.addUndo(canvasRef.current.toDataURL());
+    }
+  };
 
   return (
     <div className={styles.canvas}>
-      <canvas className={styles.canvas__inner} ref={canvasRef} width={1170} height={700}></canvas>
+      <canvas
+        onMouseDown={mouseDownHandler}
+        className={styles.canvas__inner}
+        ref={canvasRef}
+        width={1170}
+        height={700}></canvas>
     </div>
   );
 });

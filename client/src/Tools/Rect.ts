@@ -54,7 +54,7 @@ export default class Rect extends Tool {
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
 
-    img.src = this.saved as string;
+    img.src = this.saved;
     img.onload = () => {
       this.ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
       this.ctx?.drawImage(img, 0, 0, canvasWidth, canvasHeight);
