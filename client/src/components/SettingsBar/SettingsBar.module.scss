@@ -5,6 +5,16 @@
   gap: 10px;
 
   &__input {
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    padding: 3px;
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus {
+      outline: none;
+      border-color: #97df97;
+    }
+
     @extend .input-reset;
   }
 }

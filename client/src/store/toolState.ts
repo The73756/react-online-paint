@@ -12,8 +12,30 @@ class ToolState {
     this.tool = tool;
   }
 
+  public setFillColor(color: string) {
+    if (this.tool) {
+      this.tool.fillColor = color;
+    }
+  }
+
+  public setStrokeColor(color: string) {
+    if (this.tool) {
+      this.tool.strokeColor = color;
+    }
+  }
+
+  public setLineWidth(width: number) {
+    if (this.tool) {
+      this.tool.lineWidth = width;
+    }
+  }
+
   get currentToolName() {
     return this.tool?.name;
+  }
+
+  get currentLineWidth() {
+    return this.tool?.lineWidth;
   }
 }
 
