@@ -8,11 +8,20 @@ interface ImgButtonProps extends HTMLAttributes<HTMLButtonElement> {
   h?: number | string;
   className?: string;
   onClick?: () => void;
+  active?: boolean;
 }
 
-const ImgButton: FC<ImgButtonProps> = ({ children, h, w, className, onClick, ...props }) => {
+const ImgButton: FC<ImgButtonProps> = ({
+  children,
+  h,
+  w,
+  className,
+  onClick,
+  active,
+  ...props
+}) => {
   const btnProps = {
-    className: `${styles.imgBtn} ${className ? className : ''}`,
+    className: `${styles.imgBtn} ${className ? className : ''} ${active ? styles.active : ''}`,
     style: w || h ? { width: w, height: h } : {},
     ...props,
   };

@@ -4,6 +4,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+  padding: 5px;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 
   @extend .btn-reset;
+}
+
+.active {
+  border-color: #97df97;
+  background-color: #e8fee8;
 }

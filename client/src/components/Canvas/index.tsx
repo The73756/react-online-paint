@@ -11,6 +11,7 @@ const Canvas: FC = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+
     if (canvasRef.current) {
       toolState.setTool(new Brush(canvasRef.current));
     }

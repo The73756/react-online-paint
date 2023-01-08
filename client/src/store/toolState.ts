@@ -11,6 +11,10 @@ class ToolState {
   public setTool(tool: Tool) {
     this.tool = tool;
   }
+
+  get currentToolName() {
+    return this.tool?.name;
+  }
 }
 
 export default new ToolState();

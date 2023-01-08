@@ -1,39 +1,72 @@
 import { FC } from 'react';
 import TopBar from '../ui/TopBar';
 import ImgButton from '../ui/ImgButton';
-import { ReactComponent as Brush } from '../../assets/image/brush.svg';
-import { ReactComponent as Circle } from '../../assets/image/circle.svg';
-import { ReactComponent as Eraser } from '../../assets/image/eraser.svg';
-import { ReactComponent as Line } from '../../assets/image/line.svg';
-import { ReactComponent as Rect } from '../../assets/image/rect.svg';
-import { ReactComponent as Redo } from '../../assets/image/redo.svg';
-import { ReactComponent as Undo } from '../../assets/image/undo.svg';
-import { ReactComponent as Save } from '../../assets/image/save.svg';
+import { ReactComponent as BrushImg } from '../../assets/image/brush.svg';
+import { ReactComponent as CircleImg } from '../../assets/image/circle.svg';
+import { ReactComponent as EraserImg } from '../../assets/image/eraser.svg';
+import { ReactComponent as LineImg } from '../../assets/image/line.svg';
+import { ReactComponent as RectImg } from '../../assets/image/rect.svg';
+import { ReactComponent as RedoImg } from '../../assets/image/redo.svg';
+import { ReactComponent as UndoImg } from '../../assets/image/undo.svg';
+import { ReactComponent as SaveImg } from '../../assets/image/save.svg';
+import canvasState from '../../store/canvasState';
+import toolState from '../../store/toolState';
+import Rect from '../../Tools/Rect';
+import Circle from '../../Tools/Circle';
+import Brush from '../../Tools/Brush';
+import Eraser from '../../Tools/Eraser';
+import Line from '../../Tools/Line';
+import { observer } from 'mobx-react-lite';
 
 import styles from './Toolbar.module.scss';
+import { ToolNames } from '../../types/tools';
 
-const Toolbar: FC = () => {
+const Toolbar: FC = observer(() => {
+  const currentToolName = toolState.currentToolName;
+
   return (
     <TopBar>
       <div className={styles.toolbar}>
         <div className={styles.toolbar__btns}>
-          <ImgButton className={styles.toolbar__btn} aria-label="Выбрать кисть" title="Кисть">
-            <Brush />
-          </ImgButton>
-          <ImgButton className={styles.toolbar__btn} aria-label="Нарисовать круг" title="Круг">
-            <Circle />
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Выбрать кисть"
+            title="Кисть"
+            onClick={() => toolState.setTool(new Brush(canvasState.canvas))}
+            active={currentToolName === ToolNames.BRUSH}>
+            <BrushImg />
           </ImgButton>
           <ImgButton
             className={styles.toolbar__btn}
             aria-label="Нарисовать прямоугольник"
-            title="Прямоугольник">
-            <Rect />
+            title="Прямоугольник"
+            onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
+            active={currentToolName === ToolNames.RECT}>
+            <RectImg />
           </ImgButton>
-          <ImgButton className={styles.toolbar__btn} aria-label="Выбрать ластик" title="Ластик">
-            <Eraser />
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Нарисовать круг"
+            title="Круг"
+            onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
+            active={currentToolName === ToolNames.CIRCLE}>
+            <CircleImg />
           </ImgButton>
-          <ImgButton className={styles.toolbar__btn} aria-label="">
-            <Line />
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Нарисовать линию"
+            title="Линия"
+            onClick={() => toolState.setTool(new Line(canvasState.canvas))}
+            active={currentToolName === ToolNames.LINE}>
+            <LineImg />
+          </ImgButton>
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Выбрать ластик"
+            title="Ластик"
+            onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
+            active={currentToolName === ToolNames.ERASER}>
+            <EraserImg />
           </ImgButton>
           <input
             type="color"
@@ -47,21 +80,21 @@ const Toolbar: FC = () => {
             className={styles.toolbar__btn}
             aria-label="Отменить предыдущее действие"
             title="Отменить">
-            <Undo />
+            <UndoImg />
           </ImgButton>
           <ImgButton
             className={styles.toolbar__btn}
             aria-label="Вернуть предыдущее действие"
             title="Вернуть">
-            <Redo />
+            <RedoImg />
           </ImgButton>
           <ImgButton className={styles.toolbar__btn} aria-label="Сохранить" title="Сохранить">
-            <Save />
+            <SaveImg />
           </ImgButton>
         </div>
       </div>
     </TopBar>
   );
-};
+});
 
 export default Toolbar;
