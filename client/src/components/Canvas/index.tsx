@@ -6,11 +6,14 @@ import Brush from '../../Tools/Brush';
 import Modal from '../ui/Modal';
 
 import styles from './Canvas.module.scss';
+import { useParams } from 'react-router-dom';
 
 const Canvas: FC = observer(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [username, setUsername] = useState('');
+  const [localUsername, setLocalUsername] = useState('');
+  const username = canvasState.username;
+  const { id } = useParams();
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
@@ -24,6 +27,26 @@ const Canvas: FC = observer(() => {
       document.removeEventListener('keypress', keyPressHandler);
     };
   }, []);
+
+  useEffect(() => {
+    if (username) {
+      const socket = new WebSocket('ws://localhost:5000');
+      socket.onopen = () => {
+        socket.send(
+          JSON.stringify({
+            id,
+            username,
+            method: 'connection',
+          }),
+        );
+      };
+
+      socket.onmessage = (mess) => {
+        console.log(mess);
+        console.log(mess.data);
+      };
+    }
+  }, [username]);
 
   const keyPressHandler = (e: KeyboardEvent) => {
     if (e.ctrlKey && e.code === 'KeyZ') {
@@ -42,8 +65,8 @@ const Canvas: FC = observer(() => {
   };
 
   const connectHandler = () => {
-    if (username) {
-      canvasState.setUsername(username);
+    if (localUsername) {
+      canvasState.setUsername(localUsername);
       setIsModalOpen(false);
     } else {
       alert('Имя не может быть пустым!');
@@ -51,7 +74,7 @@ const Canvas: FC = observer(() => {
   };
 
   const handleModalClose = () => {
-    if (username) {
+    if (localUsername) {
       setIsModalOpen(false);
     }
   };
@@ -72,9 +95,9 @@ const Canvas: FC = observer(() => {
             placeholder="Ваше имя"
             type="text"
             className={styles.modal__input}
-            value={username}
+            value={localUsername}
             onChange={(e) => {
-              setUsername(e.target.value);
+              setLocalUsername(e.target.value);
             }}
           />
           <button className={styles.modal__btn} onClick={connectHandler}>
