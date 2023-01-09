@@ -1,13 +1,16 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
 import Brush from '../../Tools/Brush';
+import Modal from '../ui/Modal';
 
 import styles from './Canvas.module.scss';
 
 const Canvas: FC = observer(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
@@ -38,6 +41,21 @@ const Canvas: FC = observer(() => {
     }
   };
 
+  const connectHandler = () => {
+    if (username) {
+      canvasState.setUsername(username);
+      setIsModalOpen(false);
+    } else {
+      alert('Имя не может быть пустым!');
+    }
+  };
+
+  const handleModalClose = () => {
+    if (username) {
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className={styles.canvas}>
       <canvas
@@ -45,7 +63,25 @@ const Canvas: FC = observer(() => {
         className={styles.canvas__inner}
         ref={canvasRef}
         width={1170}
-        height={700}></canvas>
+        height={700}
+      />
+      <Modal opened={isModalOpen} onClose={handleModalClose}>
+        <div className={styles.modal}>
+          <h2 className={styles.modal__title}>Введите свое имя</h2>
+          <input
+            placeholder="Ваше имя"
+            type="text"
+            className={styles.modal__input}
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+          <button className={styles.modal__btn} onClick={connectHandler}>
+            Войти
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 });
