@@ -1,12 +1,12 @@
 import Tool from './Tool';
-import { CanvasType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods } from '../types/canvas';
 import { ToolNames } from '../types/tools';
 
 export default class Brush extends Tool {
   private mouseDown = false;
 
-  constructor(canvas: CanvasType) {
-    super(canvas);
+  constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
+    super(canvas, socket, sessionId);
     this.listen();
     this.name = ToolNames.BRUSH;
   }
@@ -21,6 +21,16 @@ export default class Brush extends Tool {
 
   private mouseUpHandler() {
     this.mouseDown = false;
+
+    this.socket?.send(
+      JSON.stringify({
+        method: CanvasWSMethods.DRAW,
+        id: this.sessionId,
+        figure: {
+          type: ToolNames.EMPTY,
+        },
+      }),
+    );
   }
 
   private mouseDownHandler(e: MouseEvent) {
@@ -35,12 +45,22 @@ export default class Brush extends Tool {
     const target = e.target as HTMLCanvasElement;
 
     if (this.mouseDown) {
-      this.draw(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
+      this.socket?.send(
+        JSON.stringify({
+          method: CanvasWSMethods.DRAW,
+          id: this.sessionId,
+          figure: {
+            type: ToolNames.BRUSH,
+            x: e.pageX - target.offsetLeft,
+            y: e.pageY - target.offsetTop,
+          },
+        }),
+      );
     }
   }
 
-  public draw(x: number, y: number, w?: number, h?: number) {
-    this.ctx?.lineTo(x, y);
-    this.ctx?.stroke();
+  public static draw(ctx: CanvasRenderingContext2D, x: number, y: number, w?: number, h?: number) {
+    ctx.lineTo(x, y);
+    ctx.stroke();
   }
 }

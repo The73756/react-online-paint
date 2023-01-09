@@ -3,6 +3,8 @@ import { CanvasType } from '../types/canvas';
 
 class CanvasState {
   canvas: CanvasType = null;
+  socket: WebSocket | null = null;
+  sessionId = '';
   undoList: string[] = [];
   redoList: string[] = [];
   username = '';
@@ -17,6 +19,14 @@ class CanvasState {
 
   public setUsername(username: string) {
     this.username = username;
+  }
+
+  public setSessionId(sessionId: string) {
+    this.sessionId = sessionId;
+  }
+
+  public setSocket(socket: WebSocket) {
+    this.socket = socket;
   }
 
   public addUndo(data: string) {

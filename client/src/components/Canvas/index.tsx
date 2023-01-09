@@ -1,27 +1,23 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
 import Brush from '../../Tools/Brush';
-import Modal from '../ui/Modal';
+import { useParams } from 'react-router-dom';
+import { CanvasWSMethods, MessageType } from '../../types/canvas';
+import LoginModal from '../LoginModal';
 
 import styles from './Canvas.module.scss';
-import { useParams } from 'react-router-dom';
+import { ToolNames } from '../../types/tools';
 
 const Canvas: FC = observer(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [localUsername, setLocalUsername] = useState('');
-  const username = canvasState.username;
-  const { id } = useParams();
+  const { username, socket, sessionId } = canvasState;
+  const { id } = useParams() as { id: string };
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
     document.addEventListener('keypress', keyPressHandler);
-
-    if (canvasRef.current) {
-      toolState.setTool(new Brush(canvasRef.current));
-    }
 
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
@@ -31,22 +27,52 @@ const Canvas: FC = observer(() => {
   useEffect(() => {
     if (username) {
       const socket = new WebSocket('ws://localhost:5000');
+      canvasState.setSocket(socket);
+      canvasState.sessionId = id;
+      toolState.setTool(new Brush(canvasRef.current, socket, id));
+
       socket.onopen = () => {
         socket.send(
           JSON.stringify({
             id,
             username,
-            method: 'connection',
+            method: CanvasWSMethods.CONNECT,
           }),
         );
       };
 
       socket.onmessage = (mess) => {
-        console.log(mess);
-        console.log(mess.data);
+        const msg: MessageType = JSON.parse(mess.data);
+
+        switch (msg.method) {
+          case CanvasWSMethods.CONNECT:
+            console.log(`user ${msg.username} connected`);
+            break;
+          case CanvasWSMethods.DRAW:
+            drawHandler(msg);
+            break;
+        }
       };
     }
   }, [username]);
+
+  const drawHandler = (msg: MessageType) => {
+    const figure = msg.figure;
+    const ctx = canvasRef.current?.getContext('2d');
+
+    if (ctx) {
+      switch (figure.type) {
+        case ToolNames.BRUSH:
+          Brush.draw(ctx, figure.x, figure.y);
+          break;
+        case ToolNames.EMPTY:
+          ctx.beginPath();
+          break;
+      }
+    } else {
+      console.log('ctx is undefined');
+    }
+  };
 
   const keyPressHandler = (e: KeyboardEvent) => {
     if (e.ctrlKey && e.code === 'KeyZ') {
@@ -64,21 +90,6 @@ const Canvas: FC = observer(() => {
     }
   };
 
-  const connectHandler = () => {
-    if (localUsername) {
-      canvasState.setUsername(localUsername);
-      setIsModalOpen(false);
-    } else {
-      alert('Имя не может быть пустым!');
-    }
-  };
-
-  const handleModalClose = () => {
-    if (localUsername) {
-      setIsModalOpen(false);
-    }
-  };
-
   return (
     <div className={styles.canvas}>
       <canvas
@@ -88,23 +99,7 @@ const Canvas: FC = observer(() => {
         width={1170}
         height={700}
       />
-      <Modal opened={isModalOpen} onClose={handleModalClose}>
-        <div className={styles.modal}>
-          <h2 className={styles.modal__title}>Введите свое имя</h2>
-          <input
-            placeholder="Ваше имя"
-            type="text"
-            className={styles.modal__input}
-            value={localUsername}
-            onChange={(e) => {
-              setLocalUsername(e.target.value);
-            }}
-          />
-          <button className={styles.modal__btn} onClick={connectHandler}>
-            Войти
-          </button>
-        </div>
-      </Modal>
+      <LoginModal />
     </div>
   );
 });

@@ -8,8 +8,8 @@ export default class Rect extends Tool {
   public startY = 0;
   public saved = '';
 
-  constructor(canvas: CanvasType) {
-    super(canvas);
+  constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
+    super(canvas, socket, sessionId);
     this.listen();
     this.name = ToolNames.RECT;
   }

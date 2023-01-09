@@ -4,11 +4,16 @@ import toolState from '../store/toolState';
 
 export default class Tool {
   public canvas: CanvasType;
+  public socket: WebSocket | null;
+  public sessionId: string;
   public ctx: CanvasRenderingContext2D | null | undefined;
   public name = ToolNames.EMPTY;
 
-  constructor(canvas: CanvasType) {
+  constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     this.canvas = canvas;
+    this.socket = socket;
+    this.sessionId = sessionId;
+
     this.ctx = this.canvas?.getContext('2d');
     this.destroyEvents();
 

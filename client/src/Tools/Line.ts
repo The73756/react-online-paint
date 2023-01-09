@@ -3,8 +3,8 @@ import { CanvasType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
 
 export default class Line extends Rect {
-  constructor(canvas: CanvasType) {
-    super(canvas);
+  constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
+    super(canvas, socket, sessionId);
     this.name = ToolNames.LINE;
   }
 

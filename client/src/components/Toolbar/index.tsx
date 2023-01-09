@@ -24,6 +24,7 @@ import ColorPicker from '../ui/ColorPicker';
 
 const Toolbar: FC = observer(() => {
   const currentToolName = toolState.currentToolName;
+  const { socket, sessionId } = canvasState;
 
   const changeColor = (e: ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value;
@@ -39,7 +40,7 @@ const Toolbar: FC = observer(() => {
             className={styles.toolbar__btn}
             aria-label="Выбрать кисть"
             title="Кисть"
-            onClick={() => toolState.setTool(new Brush(canvasState.canvas))}
+            onClick={() => toolState.setTool(new Brush(canvasState.canvas, socket, sessionId))}
             active={currentToolName === ToolNames.BRUSH}>
             <BrushImg />
           </ImgButton>
@@ -47,7 +48,7 @@ const Toolbar: FC = observer(() => {
             className={styles.toolbar__btn}
             aria-label="Нарисовать прямоугольник"
             title="Прямоугольник"
-            onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
+            onClick={() => toolState.setTool(new Rect(canvasState.canvas, socket, sessionId))}
             active={currentToolName === ToolNames.RECT}>
             <RectImg />
           </ImgButton>
@@ -55,7 +56,7 @@ const Toolbar: FC = observer(() => {
             className={styles.toolbar__btn}
             aria-label="Нарисовать круг"
             title="Круг"
-            onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
+            onClick={() => toolState.setTool(new Circle(canvasState.canvas, socket, sessionId))}
             active={currentToolName === ToolNames.CIRCLE}>
             <CircleImg />
           </ImgButton>
@@ -63,7 +64,7 @@ const Toolbar: FC = observer(() => {
             className={styles.toolbar__btn}
             aria-label="Нарисовать линию"
             title="Линия"
-            onClick={() => toolState.setTool(new Line(canvasState.canvas))}
+            onClick={() => toolState.setTool(new Line(canvasState.canvas, socket, sessionId))}
             active={currentToolName === ToolNames.LINE}>
             <LineImg />
           </ImgButton>
@@ -71,7 +72,7 @@ const Toolbar: FC = observer(() => {
             className={styles.toolbar__btn}
             aria-label="Выбрать ластик"
             title="Ластик"
-            onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
+            onClick={() => toolState.setTool(new Eraser(canvasState.canvas, socket, sessionId))}
             active={currentToolName === ToolNames.ERASER}>
             <EraserImg />
           </ImgButton>
