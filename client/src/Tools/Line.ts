@@ -12,11 +12,11 @@ export default class Line extends Rect {
     const target = e.target as HTMLCanvasElement;
 
     if (this.mouseDown) {
-      this.draw(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
+      this.staticDraw(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
     }
   }
 
-  public draw(x: number, y: number) {
+  public staticDraw(x: number, y: number) {
     const img = new Image();
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;

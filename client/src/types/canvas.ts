@@ -7,13 +7,20 @@ export enum CanvasWSMethods {
   DRAW = 'draw',
 }
 
+export interface FigureType {
+  type: ToolNames;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  lineWidth: number;
+  fillColor: string;
+  strokeColor: string;
+}
+
 export interface MessageType {
   method: CanvasWSMethods;
   username: string;
   id: string;
-  figure: {
-    type: ToolNames;
-    x: number;
-    y: number;
-  };
+  figure: FigureType;
 }

@@ -1,5 +1,5 @@
 import Tool from './Tool';
-import { CanvasType, CanvasWSMethods } from '../types/canvas';
+import { CanvasType, CanvasWSMethods, FigureType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
 
 export default class Brush extends Tool {
@@ -50,16 +50,20 @@ export default class Brush extends Tool {
           method: CanvasWSMethods.DRAW,
           id: this.sessionId,
           figure: {
-            type: ToolNames.BRUSH,
+            type: this.name,
             x: e.pageX - target.offsetLeft,
             y: e.pageY - target.offsetTop,
+            lineWidth: this.ctx?.lineWidth,
+            strokeColor: this.ctx?.strokeStyle as string,
           },
         }),
       );
     }
   }
 
-  public static draw(ctx: CanvasRenderingContext2D, x: number, y: number, w?: number, h?: number) {
+  public static draw(ctx: CanvasRenderingContext2D, { x, y, lineWidth, strokeColor }: FigureType) {
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeColor;
     ctx.lineTo(x, y);
     ctx.stroke();
   }

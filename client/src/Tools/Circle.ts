@@ -18,11 +18,11 @@ export default class Circle extends Rect {
       const height = currentY - this.startY;
       const radius = Math.sqrt(width ** 2 + height ** 2);
 
-      this.draw(this.startX, this.startY, radius);
+      this.staticDraw(this.startX, this.startY, radius);
     }
   }
 
-  public draw(x: number, y: number, radius: number) {
+  public staticDraw(x: number, y: number, radius: number) {
     const img = new Image();
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;

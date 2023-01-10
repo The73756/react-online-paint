@@ -1,5 +1,5 @@
 import Tool from './Tool';
-import { CanvasType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods, FigureType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
 
 export default class Rect extends Tool {
@@ -7,6 +7,8 @@ export default class Rect extends Tool {
   public startX = 0;
   public startY = 0;
   public saved = '';
+  public width = 0;
+  public height = 0;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -24,6 +26,23 @@ export default class Rect extends Tool {
 
   private mouseUpHandler() {
     this.mouseDown = false;
+
+    this.socket?.send(
+      JSON.stringify({
+        method: CanvasWSMethods.DRAW,
+        id: this.sessionId,
+        figure: {
+          type: this.name,
+          x: this.startX,
+          y: this.startY,
+          width: this.width,
+          height: this.height,
+          strokeWidth: this.ctx?.lineWidth,
+          strokeColor: this.ctx?.strokeStyle as string,
+          fillColor: this.ctx?.fillStyle as string,
+        },
+      }),
+    );
   }
 
   private mouseDownHandler(e: MouseEvent) {
@@ -42,14 +61,27 @@ export default class Rect extends Tool {
     if (this.mouseDown) {
       const currentX = e.pageX - target.offsetLeft;
       const currentY = e.pageY - target.offsetTop;
-      const width = currentX - this.startX;
-      const height = currentY - this.startY;
+      this.width = currentX - this.startX;
+      this.height = currentY - this.startY;
 
-      this.draw(this.startX, this.startY, width, height);
+      this.localDraw(this.startX, this.startY, this.width, this.height);
     }
   }
 
-  public draw(x: number, y: number, w: number, h: number) {
+  public static draw(
+    ctx: CanvasRenderingContext2D,
+    { x, y, width, height, lineWidth, fillColor, strokeColor }: FigureType,
+  ) {
+    ctx.lineWidth = lineWidth;
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
+    ctx.beginPath();
+    ctx.rect(x, y, width, height);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  public localDraw(x: number, y: number, w: number, h: number) {
     const img = new Image();
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;

@@ -6,13 +6,14 @@ import Brush from '../../Tools/Brush';
 import { useParams } from 'react-router-dom';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import LoginModal from '../LoginModal';
+import { ToolNames } from '../../types/tools';
+import Rect from '../../Tools/Rect';
 
 import styles from './Canvas.module.scss';
-import { ToolNames } from '../../types/tools';
 
 const Canvas: FC = observer(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { username, socket, sessionId } = canvasState;
+  const { username } = canvasState;
   const { id } = useParams() as { id: string };
 
   useEffect(() => {
@@ -63,7 +64,10 @@ const Canvas: FC = observer(() => {
     if (ctx) {
       switch (figure.type) {
         case ToolNames.BRUSH:
-          Brush.draw(ctx, figure.x, figure.y);
+          Brush.draw(ctx, figure);
+          break;
+        case ToolNames.RECT:
+          Rect.draw(ctx, figure);
           break;
         case ToolNames.EMPTY:
           ctx.beginPath();
