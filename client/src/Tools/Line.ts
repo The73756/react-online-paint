@@ -1,6 +1,7 @@
 import Rect from './Rect';
-import { CanvasType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
+import toolState from '../store/toolState';
 
 export default class Line extends Rect {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -8,28 +9,33 @@ export default class Line extends Rect {
     this.name = ToolNames.LINE;
   }
 
+  public mouseUpHandler() {
+    this.mouseDown = false;
+    this.socket?.send(
+      JSON.stringify({
+        method: CanvasWSMethods.DRAW,
+        id: this.sessionId,
+        figure: {
+          type: this.name,
+          x: this.startX,
+          y: this.startY,
+          lineWidth: toolState.lineWidth,
+          strokeColor: toolState.strokeColor,
+        },
+      } as MessageType),
+    );
+  }
+
   public mouseMoveHandler(e: MouseEvent) {
     const target = e.target as HTMLCanvasElement;
 
     if (this.mouseDown) {
-      this.staticDraw(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
+      this.localDraw({
+        x: e.pageX - target.offsetLeft,
+        y: e.pageY - target.offsetTop,
+        startX: this.startX,
+        startY: this.startY,
+      });
     }
-  }
-
-  public staticDraw(x: number, y: number) {
-    const img = new Image();
-    const canvasWidth = this.canvas?.width as number;
-    const canvasHeight = this.canvas?.height as number;
-
-    img.src = this.saved as string;
-    img.onload = () => {
-      this.ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
-      this.ctx?.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-      this.ctx?.beginPath();
-
-      this.ctx?.moveTo(this.startX, this.startY);
-      this.ctx?.lineTo(x, y);
-      this.ctx?.stroke();
-    };
   }
 }

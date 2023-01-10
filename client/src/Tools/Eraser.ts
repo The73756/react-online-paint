@@ -7,12 +7,4 @@ export default class Eraser extends Brush {
     super(canvas, socket, sessionId);
     this.name = ToolNames.ERASER;
   }
-
-  public draw(x: number, y: number) {
-    if (this.ctx) {
-      this.ctx.strokeStyle = '#fff';
-      this.ctx.lineTo(x, y);
-      this.ctx.stroke();
-    }
-  }
 }

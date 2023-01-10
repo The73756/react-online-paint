@@ -1,6 +1,7 @@
 import Tool from './Tool';
-import { CanvasType, CanvasWSMethods, FigureType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
+import toolState from '../store/toolState';
 
 export default class Rect extends Tool {
   public mouseDown = false;
@@ -9,6 +10,7 @@ export default class Rect extends Tool {
   public saved = '';
   public width = 0;
   public height = 0;
+  public radius = 0;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -24,7 +26,7 @@ export default class Rect extends Tool {
     }
   }
 
-  private mouseUpHandler() {
+  public mouseUpHandler() {
     this.mouseDown = false;
 
     this.socket?.send(
@@ -35,13 +37,14 @@ export default class Rect extends Tool {
           type: this.name,
           x: this.startX,
           y: this.startY,
+          radius: this.radius,
           width: this.width,
           height: this.height,
-          strokeWidth: this.ctx?.lineWidth,
-          strokeColor: this.ctx?.strokeStyle as string,
-          fillColor: this.ctx?.fillStyle as string,
+          lineWidth: toolState.lineWidth,
+          strokeColor: toolState.strokeColor,
+          fillColor: toolState.fillColor,
         },
-      }),
+      } as MessageType),
     );
   }
 
@@ -64,37 +67,7 @@ export default class Rect extends Tool {
       this.width = currentX - this.startX;
       this.height = currentY - this.startY;
 
-      this.localDraw(this.startX, this.startY, this.width, this.height);
+      this.localDraw({ x: this.startX, y: this.startY, width: this.width, height: this.height });
     }
-  }
-
-  public static draw(
-    ctx: CanvasRenderingContext2D,
-    { x, y, width, height, lineWidth, fillColor, strokeColor }: FigureType,
-  ) {
-    ctx.lineWidth = lineWidth;
-    ctx.fillStyle = fillColor;
-    ctx.strokeStyle = strokeColor;
-    ctx.beginPath();
-    ctx.rect(x, y, width, height);
-    ctx.fill();
-    ctx.stroke();
-  }
-
-  public localDraw(x: number, y: number, w: number, h: number) {
-    const img = new Image();
-    const canvasWidth = this.canvas?.width as number;
-    const canvasHeight = this.canvas?.height as number;
-
-    img.src = this.saved;
-    img.onload = () => {
-      this.ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
-      this.ctx?.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-      this.ctx?.beginPath();
-
-      this.ctx?.rect(x, y, w, h);
-      this.ctx?.fill();
-      this.ctx?.stroke();
-    };
   }
 }

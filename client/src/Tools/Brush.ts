@@ -1,9 +1,10 @@
 import Tool from './Tool';
-import { CanvasType, CanvasWSMethods, FigureType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
+import toolState from '../store/toolState';
 
 export default class Brush extends Tool {
-  private mouseDown = false;
+  public mouseDown = false;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -19,6 +20,7 @@ export default class Brush extends Tool {
     }
   }
 
+  // Окончание рисования
   private mouseUpHandler() {
     this.mouseDown = false;
 
@@ -41,7 +43,7 @@ export default class Brush extends Tool {
     this.ctx?.moveTo(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
   }
 
-  private mouseMoveHandler(e: MouseEvent) {
+  public mouseMoveHandler(e: MouseEvent) {
     const target = e.target as HTMLCanvasElement;
 
     if (this.mouseDown) {
@@ -53,18 +55,11 @@ export default class Brush extends Tool {
             type: this.name,
             x: e.pageX - target.offsetLeft,
             y: e.pageY - target.offsetTop,
-            lineWidth: this.ctx?.lineWidth,
-            strokeColor: this.ctx?.strokeStyle as string,
+            lineWidth: toolState.lineWidth,
+            strokeColor: toolState.strokeColor,
           },
-        }),
+        } as MessageType),
       );
     }
-  }
-
-  public static draw(ctx: CanvasRenderingContext2D, { x, y, lineWidth, strokeColor }: FigureType) {
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = strokeColor;
-    ctx.lineTo(x, y);
-    ctx.stroke();
   }
 }

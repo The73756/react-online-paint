@@ -1,4 +1,4 @@
-import { CanvasType } from '../types/canvas';
+import { CanvasType, FigureType, LocalFigureType } from '../types/canvas';
 import { ToolNames } from '../types/tools';
 import toolState from '../store/toolState';
 
@@ -8,6 +8,7 @@ export default class Tool {
   public sessionId: string;
   public ctx: CanvasRenderingContext2D | null | undefined;
   public name = ToolNames.EMPTY;
+  public saved = '';
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     this.canvas = canvas;
@@ -47,6 +48,76 @@ export default class Tool {
       this.canvas.onmousemove = null;
       this.canvas.onmousedown = null;
       this.canvas.onmouseup = null;
+    }
+  }
+
+  // Рисование со свичем не знаю как вынести из за static draw
+
+  public localDraw({ x, y, width, height, radius, startX, startY }: LocalFigureType) {
+    const img = new Image();
+    const canvasWidth = this.canvas?.width as number;
+    const canvasHeight = this.canvas?.height as number;
+    img.src = this.saved;
+
+    img.onload = () => {
+      if (this.ctx) {
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        this.ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        this.ctx.lineWidth = toolState.lineWidth;
+        this.ctx.fillStyle = toolState.fillColor;
+        this.ctx.strokeStyle = toolState.strokeColor;
+
+        switch (this.name) {
+          case ToolNames.RECT:
+            this.ctx.rect(x, y, width as number, height as number);
+            break;
+          case ToolNames.CIRCLE:
+            this.ctx.arc(x, y, radius as number, 0, 2 * Math.PI);
+            break;
+          case ToolNames.LINE:
+            this.ctx?.moveTo(startX as number, startY as number);
+            this.ctx?.lineTo(x, y);
+            break;
+        }
+
+        this.ctx.fill();
+        this.ctx.stroke();
+        this.ctx.beginPath();
+      }
+    };
+  }
+
+  public static draw(
+    ctx: CanvasRenderingContext2D,
+    { x, y, width, height, radius, lineWidth, fillColor, strokeColor, type }: FigureType,
+  ) {
+    ctx.lineWidth = lineWidth;
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
+
+    const colorize = () => {
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+    };
+
+    switch (type) {
+      case ToolNames.BRUSH:
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        break;
+      case ToolNames.RECT:
+        ctx.rect(x, y, width as number, height as number);
+        colorize();
+        break;
+      case ToolNames.CIRCLE:
+        ctx.arc(x, y, radius as number, 0, 2 * Math.PI);
+        colorize();
+        break;
+      case ToolNames.LINE:
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        break;
     }
   }
 }

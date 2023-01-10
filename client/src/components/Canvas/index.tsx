@@ -8,6 +8,9 @@ import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import LoginModal from '../LoginModal';
 import { ToolNames } from '../../types/tools';
 import Rect from '../../Tools/Rect';
+import Circle from '../../Tools/Circle';
+import Eraser from '../../Tools/Eraser';
+import Line from '../../Tools/Line';
 
 import styles from './Canvas.module.scss';
 
@@ -68,6 +71,15 @@ const Canvas: FC = observer(() => {
           break;
         case ToolNames.RECT:
           Rect.draw(ctx, figure);
+          break;
+        case ToolNames.CIRCLE:
+          Circle.draw(ctx, figure);
+          break;
+        case ToolNames.LINE:
+          Line.draw(ctx, figure);
+          break;
+        case ToolNames.ERASER:
+          Eraser.draw(ctx, figure);
           break;
         case ToolNames.EMPTY:
           ctx.beginPath();
