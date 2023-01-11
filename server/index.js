@@ -28,7 +28,8 @@ app.ws('/', (ws) => {
 app.post('/image', (req, res) => {
   try {
     const data = req.body.img.replace(`data:image/png;base64,`, '');
-    fs.writeFileSync(path.resolve(__dirname, 'static', `${req.body.fileName}.png`), data, 'base64');
+    fs.writeFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`), data, 'base64');
+    return res.status(200).json({ message: 'Изображение сохранено' });
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'Что-то пошло не так' });
@@ -37,6 +38,9 @@ app.post('/image', (req, res) => {
 
 app.get('/image', (req, res) => {
   try {
+    const file = fs.readFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`));
+    const data = `data:image/png;base64,${file.toString('base64')}`;
+    res.json(data);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'Что-то пошло не так' });

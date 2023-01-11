@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
+import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
@@ -18,6 +19,7 @@ const Canvas: FC = observer(() => {
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
     document.addEventListener('keypress', keyPressHandler);
+    syncCanvas();
 
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
@@ -55,6 +57,25 @@ const Canvas: FC = observer(() => {
       };
     }
   }, [username]);
+
+  const syncCanvas = async () => {
+    try {
+      const canvasData = await axios.get(`http://localhost:5000/image?id=${id}`);
+      const img = new Image();
+      img.src = canvasData.data;
+
+      img.onload = () => {
+        if (canvasRef.current) {
+          const canvasCtx = canvasRef.current.getContext('2d');
+
+          canvasCtx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          canvasCtx?.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        }
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const drawHandler = (msg: MessageType) => {
     const figure = msg.figure;
@@ -102,10 +123,24 @@ const Canvas: FC = observer(() => {
     }
   };
 
+  const mouseUpHandler = async () => {
+    if (canvasRef.current) {
+      try {
+        await axios.post(`http://localhost:5000/image/?id=${id}`, {
+          img: canvasRef.current.toDataURL(),
+        });
+      } catch (e) {
+        console.log(e);
+        alert('Ошибка при попытке синхронизации с сервером');
+      }
+    }
+  };
+
   return (
     <div className={styles.canvas}>
       <canvas
         onMouseDown={mouseDownHandler}
+        onMouseUp={mouseUpHandler}
         className={styles.canvas__inner}
         ref={canvasRef}
         width={1170}

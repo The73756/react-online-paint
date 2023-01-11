@@ -1,4 +1,4 @@
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import Modal from 'react-modal';
 import canvasState from '../../store/canvasState';
 
@@ -8,7 +8,6 @@ const LoginModal: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [localUsername, setLocalUsername] = useState('');
   const [isError, setIsError] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const ModalContentClassNames = {
     base: styles.loginModal,
@@ -44,7 +43,7 @@ const LoginModal: FC = () => {
       className={ModalContentClassNames}
       overlayClassName={ModalOverlayClassNames}
       closeTimeoutMS={200}>
-      <div className={styles.loginModalContent} ref={contentRef}>
+      <div className={styles.loginModalContent}>
         <h2 className={styles.loginModalContent__title}>Введите свое имя</h2>
         <form onSubmit={connectHandler}>
           <input
