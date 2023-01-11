@@ -28,6 +28,18 @@ const Toolbar: FC = observer(() => {
     toolState.setFillColor(color);
   };
 
+  const saveCanvas = () => {
+    if (canvasState.canvas) {
+      const dataUrl = canvasState.canvas.toDataURL();
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = canvasState.sessionId + '.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
   return (
     <TopBar>
       <div className={styles.toolbar}>
@@ -93,7 +105,11 @@ const Toolbar: FC = observer(() => {
             title="Вернуть">
             <RedoImg />
           </ImgButton>
-          <ImgButton className={styles.toolbar__btn} aria-label="Сохранить" title="Сохранить">
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Сохранить"
+            title="Сохранить"
+            onClick={saveCanvas}>
             <SaveImg />
           </ImgButton>
         </div>
