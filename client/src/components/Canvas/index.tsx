@@ -1,8 +1,9 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, MutableRefObject, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import canvasState from '../../store/canvasState';
+import CanvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import LoginModal from '../LoginModal';
@@ -12,7 +13,7 @@ import { Brush, Circle, Eraser, Line, Rect } from '../../Tools';
 import styles from './Canvas.module.scss';
 
 const Canvas: FC = observer(() => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null) as MutableRefObject<HTMLCanvasElement>;
   const { username } = canvasState;
   const { id } = useParams() as { id: string };
 
@@ -30,7 +31,7 @@ const Canvas: FC = observer(() => {
     if (username) {
       const socket = new WebSocket('ws://localhost:5000');
       canvasState.setSocket(socket);
-      canvasState.sessionId = id;
+      canvasState.setSessionId(id);
       toolState.setTool(new Brush(canvasRef.current, socket, id));
 
       socket.onopen = () => {
@@ -53,7 +54,20 @@ const Canvas: FC = observer(() => {
           case CanvasWSMethods.DRAW:
             drawHandler(msg);
             break;
+          case CanvasWSMethods.RELEASE_FIGURE:
+            canvasState.addUndo(canvasRef.current.toDataURL());
+            break;
+          case CanvasWSMethods.UNDO:
+            canvasState.undo();
+            break;
+          case CanvasWSMethods.REDO:
+            canvasState.redo();
+            break;
         }
+      };
+
+      socket.onclose = () => {
+        alert('Соединение с сервером разорвано');
       };
     }
   }, [username]);
@@ -65,12 +79,10 @@ const Canvas: FC = observer(() => {
       img.src = canvasData.data;
 
       img.onload = () => {
-        if (canvasRef.current) {
-          const canvasCtx = canvasRef.current.getContext('2d');
+        const canvasCtx = canvasRef.current.getContext('2d');
 
-          canvasCtx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-          canvasCtx?.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
-        }
+        canvasCtx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        canvasCtx?.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
       };
     } catch (e) {
       console.log(e);
@@ -109,18 +121,22 @@ const Canvas: FC = observer(() => {
 
   const keyPressHandler = (e: KeyboardEvent) => {
     if (e.ctrlKey && e.code === 'KeyZ') {
-      canvasState.undo();
+      canvasState.requestUndo();
     }
 
     if (e.ctrlKey && e.code === 'KeyY') {
-      canvasState.redo();
+      canvasState.requestRedo();
     }
   };
 
   const mouseDownHandler = () => {
-    if (canvasRef.current) {
-      canvasState.addUndo(canvasRef.current.toDataURL());
-    }
+    CanvasState.socket?.send(
+      JSON.stringify({
+        id,
+        username,
+        method: CanvasWSMethods.RELEASE_FIGURE,
+      }),
+    );
   };
 
   const mouseUpHandler = async () => {

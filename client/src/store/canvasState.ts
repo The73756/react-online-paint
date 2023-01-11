@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { CanvasType } from '../types/canvas';
+import { CanvasType, CanvasWSMethods } from '../types/canvas';
 
 class CanvasState {
   canvas: CanvasType = null;
@@ -37,6 +37,26 @@ class CanvasState {
     this.redoList.push(data);
   }
 
+  public requestUndo() {
+    this.socket?.send(
+      JSON.stringify({
+        id: this.sessionId,
+        username: this.username,
+        method: CanvasWSMethods.UNDO,
+      }),
+    );
+  }
+
+  public requestRedo() {
+    this.socket?.send(
+      JSON.stringify({
+        id: this.sessionId,
+        username: this.username,
+        method: CanvasWSMethods.REDO,
+      }),
+    );
+  }
+
   public undo() {
     const ctx = this.canvas?.getContext('2d');
     const canvasWidth = this.canvas?.width as number;
@@ -44,7 +64,7 @@ class CanvasState {
 
     if (this.undoList.length > 0) {
       const dataUrl = this.undoList.pop() as string;
-      this.redoList.push(this.canvas?.toDataURL() as string);
+      this.addRedo(this.canvas?.toDataURL() as string);
 
       const img = new Image();
 
@@ -65,7 +85,7 @@ class CanvasState {
 
     if (this.redoList.length > 0) {
       const dataUrl = this.redoList.pop() as string;
-      this.undoList.push(this.canvas?.toDataURL() as string);
+      this.addUndo(this.canvas?.toDataURL() as string);
 
       const img = new Image();
 

@@ -21,6 +21,15 @@ app.ws('/', (ws) => {
       case 'draw':
         broadcastConnection(ws, msg);
         break;
+      case 'release_figure':
+        broadcastConnection(ws, msg);
+        break;
+      case 'undo':
+        broadcastConnection(ws, msg);
+        break;
+      case 'redo':
+        broadcastConnection(ws, msg);
+        break;
     }
   });
 });
@@ -29,6 +38,7 @@ app.post('/image', (req, res) => {
   try {
     const data = req.body.img.replace(`data:image/png;base64,`, '');
     fs.writeFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`), data, 'base64');
+
     return res.status(200).json({ message: 'Изображение сохранено' });
   } catch (e) {
     console.log(e);
@@ -37,10 +47,14 @@ app.post('/image', (req, res) => {
 });
 
 app.get('/image', (req, res) => {
+  const filePath = path.resolve(__dirname, 'static', `${req.query.id}.png`);
+
   try {
-    const file = fs.readFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`));
-    const data = `data:image/png;base64,${file.toString('base64')}`;
-    res.json(data);
+    if (fs.existsSync(filePath)) {
+      const file = fs.readFileSync(filePath);
+      const data = `data:image/png;base64,${file.toString('base64')}`;
+      res.json(data);
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'Что-то пошло не так' });
