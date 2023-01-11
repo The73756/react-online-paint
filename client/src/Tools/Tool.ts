@@ -66,6 +66,7 @@ export default class Tool {
         this.ctx.lineWidth = toolState.lineWidth;
         this.ctx.fillStyle = toolState.fillColor;
         this.ctx.strokeStyle = toolState.strokeColor;
+        this.ctx.globalCompositeOperation = 'source-over';
 
         switch (this.name) {
           case ToolNames.RECT:
@@ -106,13 +107,13 @@ export default class Tool {
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
+    ctx.globalCompositeOperation = 'source-over';
 
     const colorize = () => {
       ctx.fill();
       ctx.stroke();
       ctx.beginPath();
     };
-
     switch (type) {
       case ToolNames.BRUSH:
         ctx.lineTo(x, y);
@@ -132,7 +133,7 @@ export default class Tool {
         colorize();
         break;
       case ToolNames.ERASER:
-        ctx.strokeStyle = '#fff';
+        ctx.globalCompositeOperation = 'destination-out';
         ctx.lineTo(x, y);
         ctx.stroke();
         break;
