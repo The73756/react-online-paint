@@ -1,16 +1,12 @@
 import { FC, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
-import Brush from '../../Tools/Brush';
-import { useParams } from 'react-router-dom';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import LoginModal from '../LoginModal';
 import { ToolNames } from '../../types/tools';
-import Rect from '../../Tools/Rect';
-import Circle from '../../Tools/Circle';
-import Eraser from '../../Tools/Eraser';
-import Line from '../../Tools/Line';
+import { Brush, Circle, Eraser, Line, Rect } from '../../Tools';
 
 import styles from './Canvas.module.scss';
 

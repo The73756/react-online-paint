@@ -1,6 +1,8 @@
 import { ChangeEvent, FC } from 'react';
+import { observer } from 'mobx-react-lite';
 import TopBar from '../ui/TopBar';
 import ImgButton from '../ui/ImgButton';
+import ColorPicker from '../ui/ColorPicker';
 import { ReactComponent as BrushImg } from '../../assets/image/brush.svg';
 import { ReactComponent as CircleImg } from '../../assets/image/circle.svg';
 import { ReactComponent as EraserImg } from '../../assets/image/eraser.svg';
@@ -9,18 +11,12 @@ import { ReactComponent as RectImg } from '../../assets/image/rect.svg';
 import { ReactComponent as RedoImg } from '../../assets/image/redo.svg';
 import { ReactComponent as UndoImg } from '../../assets/image/undo.svg';
 import { ReactComponent as SaveImg } from '../../assets/image/save.svg';
+import { Brush, Circle, Eraser, Line, Rect } from '../../Tools';
+import { ToolNames } from '../../types/tools';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
-import Rect from '../../Tools/Rect';
-import Circle from '../../Tools/Circle';
-import Brush from '../../Tools/Brush';
-import Eraser from '../../Tools/Eraser';
-import Line from '../../Tools/Line';
-import { observer } from 'mobx-react-lite';
 
 import styles from './Toolbar.module.scss';
-import { ToolNames } from '../../types/tools';
-import ColorPicker from '../ui/ColorPicker';
 
 const Toolbar: FC = observer(() => {
   const currentToolName = toolState.currentToolName;

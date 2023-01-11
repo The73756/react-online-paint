@@ -14,6 +14,8 @@ export interface FigureType {
   radius?: number;
   width?: number;
   height?: number;
+  startX?: number;
+  startY?: number;
   lineWidth: number;
   fillColor: string;
   strokeColor: string;

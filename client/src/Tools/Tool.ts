@@ -89,7 +89,19 @@ export default class Tool {
 
   public static draw(
     ctx: CanvasRenderingContext2D,
-    { x, y, width, height, radius, lineWidth, fillColor, strokeColor, type }: FigureType,
+    {
+      x,
+      y,
+      width,
+      height,
+      radius,
+      lineWidth,
+      fillColor,
+      strokeColor,
+      type,
+      startX,
+      startY,
+    }: FigureType,
   ) {
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = fillColor;
@@ -115,6 +127,12 @@ export default class Tool {
         colorize();
         break;
       case ToolNames.LINE:
+        ctx.moveTo(startX as number, startY as number);
+        ctx.lineTo(x, y);
+        colorize();
+        break;
+      case ToolNames.ERASER:
+        ctx.strokeStyle = '#fff';
         ctx.lineTo(x, y);
         ctx.stroke();
         break;
