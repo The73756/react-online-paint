@@ -4,6 +4,7 @@ import Canvas from './components/Canvas';
 
 import './scss/main.scss';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
 const sessionId = `${(+new Date()).toString(16)}`;
 
 function App() {

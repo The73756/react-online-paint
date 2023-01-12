@@ -6,7 +6,7 @@ import toolState from '../../store/toolState';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import LoginModal from '../LoginModal';
 import { ToolNames } from '../../types/tools';
-import { Brush, Circle, Eraser, Line, Rect } from '../../Tools';
+import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { defaultSend } from '../../ws/senders';
 import { closeHandler, openHandler } from '../../ws/handlers';
 import { getImage, updateImage } from '../../http/imageApi';
@@ -20,8 +20,8 @@ const Canvas: FC = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
-    document.addEventListener('keypress', keyPressHandler);
     void syncCanvas();
+    document.addEventListener('keypress', keyPressHandler);
 
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
@@ -48,15 +48,7 @@ const Canvas: FC = observer(() => {
   const syncCanvas = async () => {
     try {
       const imageHash = await getImage(id);
-      const img = new Image();
-      img.src = imageHash;
-
-      img.onload = () => {
-        const canvasCtx = canvasRef.current.getContext('2d');
-
-        canvasCtx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        canvasCtx?.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
-      };
+      canvasState.rewriteCanvas(canvasRef.current, imageHash);
     } catch (e) {
       console.log(e);
     }

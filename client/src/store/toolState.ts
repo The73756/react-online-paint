@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import Tool from '../Tools/Tool';
+import Tool from '../tool/Tool';
 
 class ToolState {
   tool: Tool | null = null;
