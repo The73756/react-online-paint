@@ -1,13 +1,17 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import canvasState from '../../store/canvasState';
 
 import styles from './LoginModal.module.scss';
 
 const LoginModal: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [localUsername, setLocalUsername] = useState('');
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsModalOpen(true);
+  }, []);
 
   const ModalContentClassNames = {
     base: styles.loginModal,

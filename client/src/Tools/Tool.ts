@@ -1,5 +1,5 @@
-import { CanvasType, FigureType, LocalFigureType } from '../types/canvas';
-import { ToolNames } from '../types/tools';
+import { CanvasType } from '../types/canvas';
+import { FigureType, LocalFigureType, ToolNames } from '../types/tools';
 import toolState from '../store/toolState';
 
 export default class Tool {

@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { CanvasType, CanvasWSMethods } from '../types/canvas';
+import { defaultSend } from '../ws/senders';
 
 class CanvasState {
   canvas: CanvasType = null;
@@ -38,23 +39,12 @@ class CanvasState {
   }
 
   public requestUndo() {
-    this.socket?.send(
-      JSON.stringify({
-        id: this.sessionId,
-        username: this.username,
-        method: CanvasWSMethods.UNDO,
-      }),
-    );
+    defaultSend(CanvasWSMethods.UNDO);
+  //   Передавать реквест на обновление серверной картинки
   }
 
   public requestRedo() {
-    this.socket?.send(
-      JSON.stringify({
-        id: this.sessionId,
-        username: this.username,
-        method: CanvasWSMethods.REDO,
-      }),
-    );
+    defaultSend(CanvasWSMethods.REDO);
   }
 
   public undo() {
