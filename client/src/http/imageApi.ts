@@ -5,6 +5,6 @@ export const getImage = async (sessionId: string): Promise<string> => {
   return data;
 };
 
-export const updateImage = async (sessionId: string, image: string): Promise<void> => {
-  await $host.post(`/image?id=${sessionId}`, { image });
+export const updateImage = async (sessionId: string, img: string): Promise<void> => {
+  await $host.post(`/image?id=${sessionId}`, { img });
 };

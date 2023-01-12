@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { CanvasType, CanvasWSMethods } from '../types/canvas';
 import { defaultSend } from '../ws/senders';
+import { updateImage } from '../http/imageApi';
 
 class CanvasState {
   canvas: CanvasType = null;
@@ -40,7 +41,6 @@ class CanvasState {
 
   public requestUndo() {
     defaultSend(CanvasWSMethods.UNDO);
-  //   Передавать реквест на обновление серверной картинки
   }
 
   public requestRedo() {
@@ -49,20 +49,27 @@ class CanvasState {
 
   public undo() {
     const ctx = this.canvas?.getContext('2d');
+    const currentDataUrl = this.canvas?.toDataURL() as string;
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
 
     if (this.undoList.length > 0) {
-      const dataUrl = this.undoList.pop() as string;
-      this.addRedo(this.canvas?.toDataURL() as string);
+      const undoDataUrl = this.undoList.pop() as string;
+      this.addRedo(currentDataUrl);
 
       const img = new Image();
 
-      img.src = dataUrl;
+      img.src = undoDataUrl;
       img.onload = () => {
         ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx?.drawImage(img, 0, 0, canvasWidth, canvasHeight);
       };
+
+      try {
+        void updateImage(this.sessionId, undoDataUrl);
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
     }
@@ -70,20 +77,27 @@ class CanvasState {
 
   public redo() {
     const ctx = this.canvas?.getContext('2d');
+    const currentDataUrl = this.canvas?.toDataURL() as string;
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
 
     if (this.redoList.length > 0) {
-      const dataUrl = this.redoList.pop() as string;
-      this.addUndo(this.canvas?.toDataURL() as string);
+      const redoDataUrl = this.redoList.pop() as string;
+      this.addUndo(currentDataUrl);
 
       const img = new Image();
 
-      img.src = dataUrl;
+      img.src = redoDataUrl;
       img.onload = () => {
         ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx?.drawImage(img, 0, 0, canvasWidth, canvasHeight);
       };
+
+      try {
+        void updateImage(this.sessionId, redoDataUrl);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }

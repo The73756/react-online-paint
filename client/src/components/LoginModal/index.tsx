@@ -34,6 +34,7 @@ const LoginModal: FC = () => {
       canvasState.setUsername(localUsername);
       setIsModalOpen(false);
       setIsError(false);
+      setLocalUsername('');
     } else {
       setIsError(true);
     }

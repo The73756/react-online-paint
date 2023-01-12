@@ -6,5 +6,5 @@ export const openHandler = () => {
 };
 
 export const closeHandler = () => {
-  alert('Соединение с сервером разорвано');
+  console.log('Соединение с сервером разорвано');
 };
