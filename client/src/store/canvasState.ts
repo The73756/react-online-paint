@@ -47,6 +47,10 @@ class CanvasState {
     defaultSend(CanvasWSMethods.REDO);
   }
 
+  public requestClear() {
+    defaultSend(CanvasWSMethods.CLEAR);
+  }
+
   public rewriteCanvas(canvas: CanvasType, dataUrl: string) {
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -60,6 +64,22 @@ class CanvasState {
         ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx?.drawImage(newImage, 0, 0, canvasWidth, canvasHeight);
       };
+    }
+  }
+
+  public clearCanvas() {
+    const currentDataUrl = this.canvas?.toDataURL() as string;
+    const ctx = this.canvas?.getContext('2d');
+
+    this.addUndo(currentDataUrl);
+    ctx?.clearRect(0, 0, this.canvas?.width as number, this.canvas?.height as number);
+
+    const updatedDataUrl = this.canvas?.toDataURL() as string;
+
+    try {
+      void updateImage(this.sessionId, updatedDataUrl);
+    } catch (e) {
+      console.log(e);
     }
   }
 

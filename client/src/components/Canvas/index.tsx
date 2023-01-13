@@ -30,7 +30,7 @@ const Canvas: FC = observer(() => {
 
   useEffect(() => {
     if (username) {
-      const socket = new WebSocket('ws://localhost:5000');
+      const socket = new WebSocket(process.env.REACT_APP_WS_URL as string);
       canvasState.setSocket(socket);
       canvasState.setSessionId(id);
       toolState.setTool(new Brush(canvasRef.current, socket, id));
@@ -72,6 +72,9 @@ const Canvas: FC = observer(() => {
         break;
       case CanvasWSMethods.REDO:
         canvasState.redo();
+        break;
+      case CanvasWSMethods.CLEAR:
+        canvasState.clearCanvas();
         break;
     }
   };

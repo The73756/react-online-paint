@@ -30,6 +30,8 @@ app.ws('/', (ws) => {
       case 'redo':
         broadcastConnection(ws, msg);
         break;
+      case 'clear':
+        broadcastConnection(ws, msg);
     }
   });
 });

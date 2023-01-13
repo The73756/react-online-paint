@@ -8,6 +8,7 @@ export enum CanvasWSMethods {
   RELEASE_FIGURE = 'release_figure',
   UNDO = 'undo',
   REDO = 'redo',
+  CLEAR = 'clear',
 }
 
 export interface MessageType {

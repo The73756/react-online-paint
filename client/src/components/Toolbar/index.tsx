@@ -11,6 +11,7 @@ import { ReactComponent as RectImg } from '../../assets/image/rect.svg';
 import { ReactComponent as RedoImg } from '../../assets/image/redo.svg';
 import { ReactComponent as UndoImg } from '../../assets/image/undo.svg';
 import { ReactComponent as SaveImg } from '../../assets/image/save.svg';
+import { ReactComponent as ClearImg } from '../../assets/image/clear.svg';
 import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { ToolNames } from '../../types/tools';
 import canvasState from '../../store/canvasState';
@@ -104,6 +105,13 @@ const Toolbar: FC = observer(() => {
             onClick={() => canvasState.requestRedo()}
             title="Вернуть">
             <RedoImg />
+          </ImgButton>
+          <ImgButton
+            className={styles.toolbar__btn}
+            aria-label="Очистить холст"
+            onClick={() => canvasState.requestClear()}
+            title="Очистить">
+            <ClearImg />
           </ImgButton>
           <ImgButton
             className={styles.toolbar__btn}

@@ -11,12 +11,14 @@ interface ImgButtonProps extends HTMLAttributes<HTMLButtonElement> {
 }
 
 const ImgButton: FC<ImgButtonProps> = ({ children, h, w, className, active, ...props }) => {
-  const btnProps = {
-    className: `${styles.imgBtn} ${className ? className : ''} ${active ? styles.active : ''}`,
-    style: w || h ? { width: w, height: h } : {},
-    ...props,
-  };
-  return <button {...btnProps}>{children}</button>;
+  return (
+    <button
+      className={`${styles.imgBtn} ${className ? className : ''} ${active ? styles.active : ''}`}
+      style={w || h ? { width: w, height: h } : {}}
+      {...props}>
+      {children}
+    </button>
+  );
 };
 
 export default ImgButton;
