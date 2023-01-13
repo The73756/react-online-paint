@@ -1,6 +1,6 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import canvasState from '../../store/canvasState';
+import Modal from '../ui/Modal';
 
 import styles from './LoginModal.module.scss';
 
@@ -12,20 +12,6 @@ const LoginModal: FC = () => {
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
-
-  const ModalContentClassNames = {
-    base: styles.loginModal,
-    afterOpen: styles.loginModal_afterOpen,
-    beforeClose: styles.loginModal_beforeClose,
-  };
-
-  const ModalOverlayClassNames = {
-    base: styles.loginModal__overlay,
-    afterOpen: styles.loginModal__overlay_afterOpen,
-    beforeClose: styles.loginModal__overlay_beforeClose,
-  };
-
-  Modal.setAppElement('#root');
 
   const connectHandler = (e?: FormEvent) => {
     e?.preventDefault();
@@ -44,10 +30,7 @@ const LoginModal: FC = () => {
     <Modal
       isOpen={isModalOpen}
       onRequestClose={connectHandler}
-      contentLabel="Введите свое имя"
-      className={ModalContentClassNames}
-      overlayClassName={ModalOverlayClassNames}
-      closeTimeoutMS={200}>
+      contentLabel="Окно для подключения к комнате">
       <div className={styles.loginModalContent}>
         <h2 className={styles.loginModalContent__title}>Введите свое имя</h2>
         <form onSubmit={connectHandler}>

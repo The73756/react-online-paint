@@ -3,19 +3,21 @@ import { observer } from 'mobx-react-lite';
 import TopBar from '../ui/TopBar';
 import ImgButton from '../ui/ImgButton';
 import ColorPicker from '../ui/ColorPicker';
-import { ReactComponent as BrushImg } from '../../assets/image/brush.svg';
-import { ReactComponent as CircleImg } from '../../assets/image/circle.svg';
-import { ReactComponent as EraserImg } from '../../assets/image/eraser.svg';
-import { ReactComponent as LineImg } from '../../assets/image/line.svg';
-import { ReactComponent as RectImg } from '../../assets/image/rect.svg';
-import { ReactComponent as RedoImg } from '../../assets/image/redo.svg';
-import { ReactComponent as UndoImg } from '../../assets/image/undo.svg';
-import { ReactComponent as SaveImg } from '../../assets/image/save.svg';
-import { ReactComponent as ClearImg } from '../../assets/image/clear.svg';
 import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { ToolNames } from '../../types/tools';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
+import {
+  BrushImg,
+  CircleImg,
+  ClearImg,
+  EraserImg,
+  LineImg,
+  RectImg,
+  RedoImg,
+  SaveImg,
+  UndoImg,
+} from '../../assets/images/svg';
 
 import styles from './Toolbar.module.scss';
 
@@ -91,7 +93,7 @@ const Toolbar: FC = observer(() => {
             title="Цвет заливки"
           />
         </div>
-        <div className={`${styles.toolbar__btns} ${styles.toolbar__btns_right}`}>
+        <div className={styles.toolbar__btns}>
           <ImgButton
             className={styles.toolbar__btn}
             aria-label="Отменить предыдущее действие"

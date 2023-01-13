@@ -1,50 +1,5 @@
 @import '../../scss/reset';
 
-.loginModal {
-  position: fixed;
-  overflow: auto;
-  outline: none;
-  border: 1px solid #e6e6e6;
-  border-radius: 16px;
-  padding: 24px;
-  min-width: 600px;
-  box-shadow: 0 10px 40px rgb(0 0 0 / 20%);
-  box-sizing: border-box;
-  background-color: #f8f8f8;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  cursor: default;
-
-  &_afterOpen {
-    opacity: 1;
-  }
-
-  &_beforeClose {
-    opacity: 0;
-  }
-
-  &__overlay {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(0 0 0 / 60%);
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    cursor: pointer;
-    inset: 0;
-
-    &_afterOpen {
-      opacity: 1;
-    }
-
-    &_beforeClose {
-      opacity: 0;
-    }
-  }
-}
-
 .loginModalContent {
   display: flex;
   flex-direction: column;

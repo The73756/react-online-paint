@@ -1,9 +1,10 @@
 import { ChangeEvent, FC, useState } from 'react';
 import TopBar from '../ui/TopBar';
+import ColorPicker from '../ui/ColorPicker';
+import ShareButton from '../ShareButton';
+import toolState from '../../store/toolState';
 
 import styles from './SettingsBar.module.scss';
-import toolState from '../../store/toolState';
-import ColorPicker from '../ui/ColorPicker';
 
 const SettingsBar: FC = () => {
   const [value, setValue] = useState(1);
@@ -29,23 +30,28 @@ const SettingsBar: FC = () => {
   return (
     <TopBar>
       <div className={styles.settingBar}>
-        <label htmlFor="lineWidth">Толщина линии:</label>
-        <input
-          id="lineWidth"
-          className={styles.settingBar__input}
-          onChange={onChange}
-          value={value}
-          type="number"
-          min={1}
-          max={50}
-        />
-        <label htmlFor="lineColor">Цвет линии:</label>
-        <ColorPicker
-          id="lineColor"
-          onChange={changeColor}
-          aria-label="Выбрать цвет линии"
-          title="Цвет линии"
-        />
+        <div className={styles.settingBar__group}>
+          <label htmlFor="lineWidth">Толщина линии:</label>
+          <input
+            id="lineWidth"
+            className={styles.settingBar__input}
+            onChange={onChange}
+            value={value}
+            type="number"
+            min={1}
+            max={50}
+          />
+          <label htmlFor="lineColor">Цвет линии:</label>
+          <ColorPicker
+            id="lineColor"
+            onChange={changeColor}
+            aria-label="Выбрать цвет линии"
+            title="Цвет линии"
+          />
+        </div>
+        <div className={styles.settingBar__group}>
+          <ShareButton />
+        </div>
       </div>
     </TopBar>
   );

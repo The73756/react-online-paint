@@ -3,7 +3,13 @@
 .settingBar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
   &__input {
     border: 1px solid #e3e3e3;
