@@ -1,17 +1,23 @@
 @import '../../../scss/reset';
 
 .colorPicker {
-  border: 1px solid #e3e3e3;
+  border: 1px solid var(--light-gray-color);
   border-radius: 5px;
   width: 30px;
   height: 30px;
-  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  transition: border-color var(--transition), transform var(--transition),
+    box-shadow var(--transition);
   cursor: pointer;
 
   &:focus {
-    outline: none;
-    border-color: #97df97;
-    background-color: #e8fee8;
+    border-color: var(--accent-color);
+    box-shadow: 2px 2px 4px 0 rgb(34 60 80 / 20%);
+    transform: translateY(-1px);
+  }
+
+  &:hover {
+    box-shadow: 2px 2px 4px 0 rgb(34 60 80 / 20%);
+    transform: translateY(-1px);
   }
 
   @extend .input-reset;

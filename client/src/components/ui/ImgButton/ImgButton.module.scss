@@ -4,15 +4,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #e3e3e3;
+  border: 1px solid var(--light-gray-color);
   border-radius: 5px;
   padding: 5px;
-  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  transition: border-color var(--transition), transform var(--transition),
+    box-shadow var(--transition);
+
+  &:hover {
+    box-shadow: var(--button-shadow);
+    transform: translateY(-1px);
+  }
 
   @extend .btn-reset;
 }
 
 .active {
-  border-color: #97df97;
-  background-color: #e8fee8;
+  border-color: var(--accent-color);
+  box-shadow: var(--button-shadow);
+  transform: translateY(-1px);
 }

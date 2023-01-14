@@ -15,7 +15,7 @@
   &__input {
     display: block;
     margin-bottom: 10px;
-    border: 1px solid #e3e3e3;
+    border: 1px solid var(--light-gray-color);
     border-radius: 5px;
     padding: 10px;
     width: 100%;
@@ -24,14 +24,14 @@
   }
 
   &__btn {
-    border: 1px solid #e3e3e3;
+    border: 1px solid var(--light-gray-color);
     border-radius: 5px;
     padding: 10px;
     font-size: 16px;
-    transition: background-color, 0.2s ease-in-out;
+    transition: background-color var(--transition);
 
     &:hover {
-      background-color: #e3e3e3;
+      background-color: var(--light-gray-color);
     }
 
     @extend .btn-reset;

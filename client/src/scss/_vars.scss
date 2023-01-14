@@ -4,11 +4,15 @@
   --content-width: 1170px;
   --container-offset: 15px;
   --container-width: calc(var(--content-width) + (var(--container-offset) * 2));
+  --transition: 0.2s ease-in-out;
 
   // colors
   --light-color: #fff;
+  --light-gray-color: #e3e3e3;
   --bg-color: #f6f6f6;
+  --accent-color: #00f;
 
   // components
   --toolbar-height: 40px;
+  --button-shadow: 2px 2px 4px 0 rgb(34 60 80 / 20%);
 }
