@@ -51,6 +51,12 @@ export default class Tool {
     }
   }
 
+  public normalizeVector({ x, y }: { x: number; y: number }) {
+    let vectorLength = Math.sqrt(x * x + y * y);
+
+    return { x: x / vectorLength, y: y / vectorLength };
+  }
+
   // Рисование со свичем не знаю как вынести из за static draw
 
   public localDraw({ x, y, width, height, radius, startX, startY }: LocalFigureType) {

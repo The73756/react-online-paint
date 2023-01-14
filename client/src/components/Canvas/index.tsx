@@ -149,6 +149,7 @@ const Canvas: FC = observer(() => {
         ref={canvasRef}
         width={1170}
         height={700}
+        tabIndex={1}
       />
     </div>
   );
