@@ -1,0 +1,50 @@
+@import '../../scss/reset';
+
+.shareButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  &__img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.shareModal {
+  display: flex;
+  flex-direction: column;
+
+  &__group {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__link {
+    flex: 1 1 auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #eee;
+
+    @extend .btn-reset;
+  }
+
+  &__btn {
+    margin-top: 10px;
+    margin-left: auto;
+    border: 1px solid #d40f0f;
+    border-radius: 5px;
+    padding: 8px 10px;
+
+    @extend .btn-reset;
+  }
+}
