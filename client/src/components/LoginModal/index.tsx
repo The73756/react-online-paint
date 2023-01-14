@@ -18,6 +18,8 @@ const LoginModal: FC = () => {
 
     if (localUsername) {
       canvasState.setUsername(localUsername);
+      canvasState.setAuth(true);
+
       setIsModalOpen(false);
       setIsError(false);
       setLocalUsername('');

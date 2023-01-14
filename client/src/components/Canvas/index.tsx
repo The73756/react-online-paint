@@ -1,19 +1,20 @@
-import { FC, MutableRefObject, useEffect, useRef } from 'react';
+import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import canvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
-import LoginModal from '../LoginModal';
 import { ToolNames } from '../../types/tools';
 import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { defaultSend } from '../../ws/senders';
 import { closeHandler, openHandler } from '../../ws/handlers';
 import { getImage, updateImage } from '../../http/imageApi';
+import Loader from '../ui/Loader';
 
 import styles from './Canvas.module.scss';
 
 const Canvas: FC = observer(() => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null) as MutableRefObject<HTMLCanvasElement>;
   const { id } = useParams() as { id: string };
   const { username } = canvasState;
@@ -46,9 +47,11 @@ const Canvas: FC = observer(() => {
   }, [username]);
 
   const syncCanvas = async () => {
+    setIsImageLoading(true);
     try {
       const imageHash = await getImage(id);
       canvasState.rewriteCanvas(canvasRef.current, imageHash);
+      setIsImageLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -137,6 +140,8 @@ const Canvas: FC = observer(() => {
 
   return (
     <div className={styles.canvas}>
+      <Loader isLoading={isImageLoading} className={styles.loader} />
+
       <canvas
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
@@ -145,7 +150,6 @@ const Canvas: FC = observer(() => {
         width={1170}
         height={700}
       />
-      <LoginModal />
     </div>
   );
 });

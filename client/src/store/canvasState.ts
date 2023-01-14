@@ -10,6 +10,7 @@ class CanvasState {
   undoList: string[] = [];
   redoList: string[] = [];
   username = '';
+  isAuth = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -21,6 +22,10 @@ class CanvasState {
 
   public setUsername(username: string) {
     this.username = username;
+  }
+
+  public setAuth(isAuth: boolean) {
+    this.isAuth = isAuth;
   }
 
   public setSessionId(sessionId: string) {
