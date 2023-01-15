@@ -56,6 +56,8 @@ app.get('/image', (req, res) => {
       const file = fs.readFileSync(filePath);
       const data = `data:image/png;base64,${file.toString('base64')}`;
       res.json(data);
+    } else {
+      res.json(null);
     }
   } catch (e) {
     console.log(e);

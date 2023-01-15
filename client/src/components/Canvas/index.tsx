@@ -51,9 +51,10 @@ const Canvas: FC = observer(() => {
     try {
       const imageHash = await getImage(id);
       canvasState.rewriteCanvas(canvasRef.current, imageHash);
-      setIsImageLoading(false);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsImageLoading(false);
     }
   };
 
