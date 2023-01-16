@@ -52,7 +52,7 @@ export default class Tool {
   }
   // Рисование со свичем не знаю как вынести из за static draw
 
-  public localDraw({ x, y, width, height, radius, startX, startY }: LocalFigureType) {
+  public localDraw({ x, y, width, height, radiusX, radiusY, startX, startY }: LocalFigureType) {
     const img = new Image();
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
@@ -72,7 +72,7 @@ export default class Tool {
             this.ctx.rect(x, y, width as number, height as number);
             break;
           case ToolNames.CIRCLE:
-            this.ctx.arc(x, y, radius as number, 0, 2 * Math.PI);
+            this.ctx.ellipse(x, y, radiusX as number, radiusY as number, 0, 0, 2 * Math.PI);
             break;
           case ToolNames.LINE:
             this.ctx?.moveTo(startX as number, startY as number);
@@ -94,7 +94,8 @@ export default class Tool {
       y,
       width,
       height,
-      radius,
+      radiusX,
+      radiusY,
       lineWidth,
       fillColor,
       strokeColor,
@@ -123,7 +124,7 @@ export default class Tool {
         colorize();
         break;
       case ToolNames.CIRCLE:
-        ctx.arc(x, y, radius as number, 0, 2 * Math.PI);
+        ctx.ellipse(x, y, radiusX as number, radiusY as number, 0, 0, 2 * Math.PI);
         colorize();
         break;
       case ToolNames.LINE:

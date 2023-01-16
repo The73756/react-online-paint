@@ -16,9 +16,15 @@ export default class Circle extends Rect {
       const currentY = e.pageY - target.offsetTop;
       this.width = currentX - this.startX;
       this.height = currentY - this.startY;
-      this.radius = Math.sqrt(this.width ** 2 + this.height ** 2);
+      this.radiusX = Math.sqrt(this.width ** 2 + this.height ** 2);
+      this.radiusY = Math.sqrt(this.width ** 2 + this.height ** 2);
 
-      this.localDraw({ x: this.startX, y: this.startY, radius: this.radius });
+      this.localDraw({
+        x: this.startX,
+        y: this.startY,
+        radiusX: this.radiusX,
+        radiusY: this.radiusY,
+      });
     }
   }
 }

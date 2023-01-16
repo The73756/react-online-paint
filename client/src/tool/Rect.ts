@@ -10,7 +10,8 @@ export default class Rect extends Tool {
   public saved = '';
   public width = 0;
   public height = 0;
-  public radius = 0;
+  public radiusX = 0;
+  public radiusY = 0;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -37,7 +38,8 @@ export default class Rect extends Tool {
           type: this.name,
           x: this.startX,
           y: this.startY,
-          radius: this.radius,
+          radiusX: this.radiusX,
+          radiusY: this.radiusY,
           width: this.width,
           height: this.height,
           lineWidth: toolState.lineWidth,
@@ -65,7 +67,7 @@ export default class Rect extends Tool {
       const currentX = e.pageX - target.offsetLeft;
       const currentY = e.pageY - target.offsetTop;
       this.width = currentX - this.startX;
-      this.height = currentY - this.startY;
+      this.height = e.shiftKey ? this.width : currentY - this.startY;
 
       this.localDraw({ x: this.startX, y: this.startY, width: this.width, height: this.height });
     }

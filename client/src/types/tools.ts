@@ -11,7 +11,8 @@ export interface FigureType {
   type: ToolNames;
   x: number;
   y: number;
-  radius?: number;
+  radiusX?: number;
+  radiusY?: number;
   width?: number;
   height?: number;
   startX?: number;
@@ -26,7 +27,8 @@ export interface LocalFigureType {
   y: number;
   width?: number;
   height?: number;
-  radius?: number;
+  radiusX?: number;
+  radiusY?: number;
   startX?: number;
   startY?: number;
 }
