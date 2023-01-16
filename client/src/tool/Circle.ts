@@ -12,18 +12,17 @@ export default class Circle extends Rect {
     const target = e.target as HTMLCanvasElement;
 
     if (this.mouseDown) {
-      const currentX = e.pageX - target.offsetLeft;
-      const currentY = e.pageY - target.offsetTop;
-      this.width = currentX - this.startX;
-      this.height = currentY - this.startY;
-      this.radiusX = Math.sqrt(this.width ** 2 + this.height ** 2);
-      this.radiusY = Math.sqrt(this.width ** 2 + this.height ** 2);
+      this.width = e.pageX - target.offsetLeft;
+      this.height = e.pageY - target.offsetTop;
+
+      this.isShift = e.shiftKey;
 
       this.localDraw({
         x: this.startX,
         y: this.startY,
-        radiusX: this.radiusX,
-        radiusY: this.radiusY,
+        width: this.width,
+        height: this.height,
+        isShift: this.isShift,
       });
     }
   }

@@ -50,9 +50,41 @@ export default class Tool {
       this.canvas.onmouseup = null;
     }
   }
-  // Рисование со свичем не знаю как вынести из за static draw
 
-  public localDraw({ x, y, width, height, radiusX, radiusY, startX, startY }: LocalFigureType) {
+  public static drawCircle(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    isShift?: boolean,
+  ) {
+    const step = 0.01;
+    const radiusX = (width - x) * 0.5;
+    const radiusY = isShift ? radiusX : (height - y) * 0.5;
+    const centerX = x + radiusX;
+    const centerY = y + radiusY;
+    const pi2 = Math.PI * 2 - step;
+    let a = step;
+
+    ctx.beginPath();
+    ctx.moveTo(centerX + radiusX * Math.cos(0), centerY + radiusY * Math.sin(0));
+
+    for (; a < pi2; a += step) {
+      ctx.lineTo(centerX + radiusX * Math.cos(a), centerY + radiusY * Math.sin(a));
+    }
+  }
+
+  /* Рисование со свичем не знаю как вынести из-за static draw
+      В LocalDraw можно попробовать принимать каллбек ибо перезатирание канваса использется везде
+      Надо рефакторить ибо мне не нравится drawCircle тут конкретно
+      Возможно стоит инкапсулировать методы draw и localDraw в классы фигур
+      Пока не оптимизировал - работал над функционалом
+    */
+
+  //TODO: РЕФАКТОР ВСЕХ ИНСТРУМЕНТОВ!!!
+
+  public localDraw({ x, y, width, height, startX, startY, isShift }: LocalFigureType) {
     const img = new Image();
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
@@ -72,11 +104,11 @@ export default class Tool {
             this.ctx.rect(x, y, width as number, height as number);
             break;
           case ToolNames.CIRCLE:
-            this.ctx.ellipse(x, y, radiusX as number, radiusY as number, 0, 0, 2 * Math.PI);
+            Tool.drawCircle(this.ctx, x, y, width as number, height as number, isShift);
             break;
           case ToolNames.LINE:
-            this.ctx?.moveTo(startX as number, startY as number);
-            this.ctx?.lineTo(x, y);
+            this.ctx.moveTo(startX as number, startY as number);
+            this.ctx.lineTo(x, y);
             break;
         }
 
@@ -89,20 +121,7 @@ export default class Tool {
 
   public static draw(
     ctx: CanvasRenderingContext2D,
-    {
-      x,
-      y,
-      width,
-      height,
-      radiusX,
-      radiusY,
-      lineWidth,
-      fillColor,
-      strokeColor,
-      type,
-      startX,
-      startY,
-    }: FigureType,
+    { x, y, width, height, lineWidth, fillColor, strokeColor, type, startX, startY, isShift }: FigureType,
   ) {
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = fillColor;
@@ -124,7 +143,7 @@ export default class Tool {
         colorize();
         break;
       case ToolNames.CIRCLE:
-        ctx.ellipse(x, y, radiusX as number, radiusY as number, 0, 0, 2 * Math.PI);
+        Tool.drawCircle(ctx, x, y, width as number, height as number, isShift);
         colorize();
         break;
       case ToolNames.LINE:

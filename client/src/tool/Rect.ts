@@ -5,13 +5,12 @@ import toolState from '../store/toolState';
 
 export default class Rect extends Tool {
   public mouseDown = false;
+  public isShift = false;
   public startX = 0;
   public startY = 0;
   public saved = '';
   public width = 0;
   public height = 0;
-  public radiusX = 0;
-  public radiusY = 0;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -38,10 +37,9 @@ export default class Rect extends Tool {
           type: this.name,
           x: this.startX,
           y: this.startY,
-          radiusX: this.radiusX,
-          radiusY: this.radiusY,
           width: this.width,
           height: this.height,
+          isShift: this.isShift,
           lineWidth: toolState.lineWidth,
           strokeColor: toolState.strokeColor,
           fillColor: toolState.fillColor,

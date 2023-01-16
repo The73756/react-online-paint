@@ -17,6 +17,7 @@ export interface FigureType {
   height?: number;
   startX?: number;
   startY?: number;
+  isShift?: boolean;
   lineWidth: number;
   fillColor: string;
   strokeColor: string;
@@ -27,8 +28,7 @@ export interface LocalFigureType {
   y: number;
   width?: number;
   height?: number;
-  radiusX?: number;
-  radiusY?: number;
   startX?: number;
   startY?: number;
+  isShift?: boolean;
 }
