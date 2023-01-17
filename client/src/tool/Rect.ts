@@ -1,7 +1,8 @@
 import Tool from './Tool';
-import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
-import { ToolNames } from '../types/tools';
+import { CanvasType } from '../types/canvas';
+import { FigureType, ToolNames } from '../types/tools';
 import toolState from '../store/toolState';
+import { drawSend } from '../ws/senders';
 
 export default class Rect extends Tool {
   public mouseDown = false;
@@ -29,23 +30,19 @@ export default class Rect extends Tool {
   public mouseUpHandler() {
     this.mouseDown = false;
 
-    this.socket?.send(
-      JSON.stringify({
-        method: CanvasWSMethods.DRAW,
-        id: this.sessionId,
-        figure: {
-          type: this.name,
-          x: this.startX,
-          y: this.startY,
-          width: this.width,
-          height: this.height,
-          isShift: this.isShift,
-          lineWidth: toolState.lineWidth,
-          strokeColor: toolState.strokeColor,
-          fillColor: toolState.fillColor,
-        },
-      } as MessageType),
-    );
+    const figure: FigureType = {
+      type: this.name,
+      x: this.startX,
+      y: this.startY,
+      width: this.width,
+      height: this.height,
+      isShift: this.isShift,
+      lineWidth: toolState.lineWidth,
+      strokeColor: toolState.strokeColor,
+      fillColor: toolState.fillColor,
+    };
+
+    drawSend(figure);
   }
 
   private mouseDownHandler(e: MouseEvent) {
