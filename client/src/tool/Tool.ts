@@ -59,20 +59,25 @@ export default class Tool {
     height: number,
     isShift?: boolean,
   ) {
-    const step = 0.01;
-    const radiusX = (width - x) * 0.5;
-    const radiusY = isShift ? radiusX : (height - y) * 0.5;
-    const centerX = x + radiusX;
-    const centerY = y + radiusY;
-    const pi2 = Math.PI * 2 - step;
-    let a = step;
+    const radiusX = Math.abs((width - x) * 0.5);
+    const radiusY = isShift ? radiusX : Math.abs((height - y) * 0.5);
+    let centerX: number;
+    let centerY: number;
+
+    if (width >= x) {
+      centerX = x + radiusX;
+    } else {
+      centerX = x - radiusX;
+    }
+
+    if (height >= y) {
+      centerY = y + radiusY;
+    } else {
+      centerY = y - radiusY;
+    }
 
     ctx.beginPath();
-    ctx.moveTo(centerX + radiusX * Math.cos(0), centerY + radiusY * Math.sin(0));
-
-    for (; a < pi2; a += step) {
-      ctx.lineTo(centerX + radiusX * Math.cos(a), centerY + radiusY * Math.sin(a));
-    }
+    ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
   }
 
   /* Рисование со свичем не знаю как вынести из-за static draw
@@ -121,7 +126,19 @@ export default class Tool {
 
   public static draw(
     ctx: CanvasRenderingContext2D,
-    { x, y, width, height, lineWidth, fillColor, strokeColor, type, startX, startY, isShift }: FigureType,
+    {
+      x,
+      y,
+      width,
+      height,
+      lineWidth,
+      fillColor,
+      strokeColor,
+      type,
+      startX,
+      startY,
+      isShift,
+    }: FigureType,
   ) {
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = fillColor;
