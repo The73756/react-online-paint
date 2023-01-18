@@ -1,6 +1,6 @@
 import { CanvasWSMethods, MessageType } from '../types/canvas';
 import canvasState from '../store/canvasState';
-import { FigureType } from '../types/tools';
+import { ToolType } from '../types/tools';
 
 export const defaultSend = (method: CanvasWSMethods) => {
   if (!canvasState.socket || !canvasState.isAuth) {
@@ -16,7 +16,7 @@ export const defaultSend = (method: CanvasWSMethods) => {
   );
 };
 
-export const drawSend = (propsFigure: FigureType) => {
+export const drawSend = (propsFigure: ToolType) => {
   if (!canvasState.socket || !canvasState.isAuth) {
     return alert('You are not authorized');
   }

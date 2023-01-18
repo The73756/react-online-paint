@@ -1,7 +1,7 @@
 import Tool from './Tool';
-import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
-import { ToolNames } from '../types/tools';
-import toolState from '../store/toolState';
+import { CanvasType, CanvasWSMethods, MessageType } from '../../types/canvas';
+import { ToolNames } from '../../types/tools';
+import toolState from '../../store/toolState';
 
 export default class Brush extends Tool {
   public mouseDown = false;

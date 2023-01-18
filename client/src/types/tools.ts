@@ -9,26 +9,29 @@ export enum ToolNames {
 
 export interface FigureType {
   type: ToolNames;
-  x: number;
-  y: number;
-  radiusX?: number;
-  radiusY?: number;
+  x?: number;
+  y?: number;
   width?: number;
   height?: number;
-  startX?: number;
-  startY?: number;
-  isShift?: boolean;
-  lineWidth: number;
-  fillColor: string;
-  strokeColor: string;
+  lineWidth?: number;
+  fillColor?: string;
+  strokeColor?: string;
 }
 
-export interface LocalFigureType {
+export interface RectType extends FigureType {
+  type: ToolNames.RECT;
   x: number;
   y: number;
-  width?: number;
-  height?: number;
-  startX?: number;
-  startY?: number;
-  isShift?: boolean;
+  width: number;
+  height: number;
 }
+
+export interface CircleType extends FigureType {
+  type: ToolNames.CIRCLE;
+  x: number;
+  y: number;
+  radiusX: number;
+  radiusY: number;
+}
+
+export type ToolType = RectType | CircleType;

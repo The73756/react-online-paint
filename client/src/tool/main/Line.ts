@@ -1,7 +1,7 @@
 import Rect from './Rect';
-import { CanvasType, CanvasWSMethods, MessageType } from '../types/canvas';
-import { ToolNames } from '../types/tools';
-import toolState from '../store/toolState';
+import { CanvasType, CanvasWSMethods, MessageType } from '../../types/canvas';
+import { ToolNames } from '../../types/tools';
+import toolState from '../../store/toolState';
 
 export default class Line extends Rect {
   private currentX = 0;
