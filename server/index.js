@@ -32,6 +32,10 @@ app.ws('/', (ws) => {
         break;
       case 'clear':
         broadcastConnection(ws, msg);
+        break;
+      case 'disconnect':
+        broadcastConnection(ws, msg);
+        break;
     }
   });
 });

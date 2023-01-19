@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { CanvasType, CanvasWSMethods } from '../types/canvas';
 import { defaultSend } from '../ws/senders';
 import { updateImage } from '../http/imageApi';
+import { toast } from 'react-hot-toast';
 
 class CanvasState {
   canvas: CanvasType = null;
@@ -80,12 +81,9 @@ class CanvasState {
     ctx?.clearRect(0, 0, this.canvas?.width as number, this.canvas?.height as number);
 
     const updatedDataUrl = this.canvas?.toDataURL() as string;
+    toast.success('Очищено');
 
-    try {
-      void updateImage(this.sessionId, updatedDataUrl);
-    } catch (e) {
-      console.log(e);
-    }
+    void updateImage(this.sessionId, updatedDataUrl);
   }
 
   public undo() {
@@ -96,12 +94,7 @@ class CanvasState {
       this.addRedo(currentDataUrl);
 
       this.rewriteCanvas(this.canvas, undoDataUrl);
-
-      try {
-        void updateImage(this.sessionId, undoDataUrl);
-      } catch (e) {
-        console.log(e);
-      }
+      void updateImage(this.sessionId, undoDataUrl);
     }
   }
 
@@ -113,12 +106,7 @@ class CanvasState {
       this.addUndo(currentDataUrl);
 
       this.rewriteCanvas(this.canvas, redoDataUrl);
-
-      try {
-        void updateImage(this.sessionId, redoDataUrl);
-      } catch (e) {
-        console.log(e);
-      }
+      void updateImage(this.sessionId, redoDataUrl);
     }
   }
 }

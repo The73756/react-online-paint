@@ -9,6 +9,7 @@ export enum CanvasWSMethods {
   UNDO = 'undo',
   REDO = 'redo',
   CLEAR = 'clear',
+  DISCONNECT = 'disconnect',
 }
 
 export interface MessageType {

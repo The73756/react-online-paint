@@ -7,9 +7,10 @@ import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import { ToolNames } from '../../types/tools';
 import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { defaultSend } from '../../ws/senders';
-import { closeHandler, openHandler } from '../../ws/handlers';
+import { closeHandler, disconnectHandler, openHandler } from '../../ws/handlers';
 import { getImage, updateImage } from '../../http/imageApi';
 import Loader from '../ui/Loader';
+import { toast, Toaster } from 'react-hot-toast';
 
 import styles from './Canvas.module.scss';
 
@@ -37,11 +38,15 @@ const Canvas: FC = observer(() => {
       toolState.setTool(new Brush(canvasRef.current, socket, id));
 
       socket.addEventListener('open', openHandler);
-      socket.addEventListener('message', (mess) => socketMessageHandler(mess));
+      socket.addEventListener('message', socketMessageHandler);
       socket.addEventListener('close', closeHandler);
+      window.addEventListener('beforeunload', disconnectHandler);
 
       return () => {
-        socket.close();
+        socket.removeEventListener('open', openHandler);
+        socket.removeEventListener('message', socketMessageHandler);
+        socket.removeEventListener('close', closeHandler);
+        window.removeEventListener('beforeunload', disconnectHandler);
       };
     }
   }, [username]);
@@ -53,6 +58,7 @@ const Canvas: FC = observer(() => {
       canvasState.rewriteCanvas(canvasRef.current, imageHash);
     } catch (e) {
       console.log(e);
+      toast.error('Произошла ошибка при синхронизации изображения!');
     } finally {
       setIsImageLoading(false);
     }
@@ -63,7 +69,11 @@ const Canvas: FC = observer(() => {
 
     switch (parsedMsg.method) {
       case CanvasWSMethods.CONNECT:
-        console.log(`user ${parsedMsg.username} connected`);
+        const string =
+          parsedMsg.username === canvasState.username
+            ? 'Подключено'
+            : `Пользователь ${parsedMsg.username} подключился`;
+        toast.success(string);
         break;
       case CanvasWSMethods.DRAW:
         drawHandler(parsedMsg);
@@ -80,6 +90,8 @@ const Canvas: FC = observer(() => {
       case CanvasWSMethods.CLEAR:
         canvasState.clearCanvas();
         break;
+      case CanvasWSMethods.DISCONNECT:
+        toast.error(`Пользователь ${parsedMsg.username} отключился`);
     }
   };
 
@@ -108,8 +120,6 @@ const Canvas: FC = observer(() => {
           ctx.beginPath();
           break;
       }
-    } else {
-      console.log('ctx is undefined');
     }
   };
 
@@ -130,19 +140,13 @@ const Canvas: FC = observer(() => {
 
   const mouseUpHandler = async () => {
     if (canvasRef.current) {
-      try {
-        await updateImage(id, canvasRef.current.toDataURL());
-      } catch (e) {
-        console.log(e);
-        alert('Ошибка при попытке синхронизации с сервером');
-      }
+      await updateImage(id, canvasRef.current.toDataURL());
     }
   };
 
   return (
     <div className={styles.canvas}>
       <Loader isLoading={isImageLoading} className={styles.loader} />
-
       <canvas
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
@@ -151,6 +155,14 @@ const Canvas: FC = observer(() => {
         width={1170}
         height={700}
         tabIndex={1}
+      />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontSize: 18,
+          },
+        }}
       />
     </div>
   );

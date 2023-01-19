@@ -1,10 +1,11 @@
 import { CanvasWSMethods, MessageType } from '../types/canvas';
 import canvasState from '../store/canvasState';
 import { ToolType } from '../types/tools';
+import { toast } from 'react-hot-toast';
 
 export const defaultSend = (method: CanvasWSMethods) => {
   if (!canvasState.socket || !canvasState.isAuth) {
-    return alert('You are not authorized');
+    return toast.error('Вы не авторизованы!');
   }
 
   canvasState.socket.send(
@@ -18,7 +19,7 @@ export const defaultSend = (method: CanvasWSMethods) => {
 
 export const drawSend = (propsFigure: ToolType) => {
   if (!canvasState.socket || !canvasState.isAuth) {
-    return alert('You are not authorized');
+    return toast.error('Вы не авторизованы!');
   }
   canvasState.socket.send(
     JSON.stringify({
