@@ -14,8 +14,8 @@ export default class Tool {
     this.canvas = canvas;
     this.socket = socket;
     this.sessionId = sessionId;
-
     this.ctx = this.canvas?.getContext('2d');
+
     this.destroyEvents();
 
     if (this.ctx) {

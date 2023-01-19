@@ -30,6 +30,6 @@ export default class Rect extends ComplexToolHandler {
       ctx.rect(x, y, width, height);
     };
 
-    super.draw(ctx, figure, drawRect);
+    super.onlineDraw(ctx, figure, drawRect);
   }
 }

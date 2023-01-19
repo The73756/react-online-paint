@@ -1,4 +1,4 @@
-import { FigureType } from './tools';
+import { ToolType } from './tools';
 
 export type CanvasType = HTMLCanvasElement | null;
 
@@ -15,5 +15,5 @@ export interface MessageType {
   method: CanvasWSMethods;
   username: string;
   id: string;
-  figure: FigureType;
+  figure: ToolType;
 }

@@ -39,6 +39,8 @@ export default class ComplexToolHandler extends Tool {
         fillColor: toolState.fillColor,
       };
       drawSend(figure);
+    } else {
+      console.error('setCurrentProps is not defined');
     }
   }
 
@@ -59,7 +61,7 @@ export default class ComplexToolHandler extends Tool {
       const currentX = e.pageX - target.offsetLeft;
       const currentY = e.pageY - target.offsetTop;
       this.width = currentX - this.startX;
-      this.height = e.shiftKey ? this.width : currentY - this.startY; //относится ко квадрату
+      this.height = e.shiftKey ? this.width : currentY - this.startY;
 
       this.localDraw(e);
     }
@@ -95,24 +97,20 @@ export default class ComplexToolHandler extends Tool {
     img.onload = draw;
   }
 
-  public static draw(
+  public static onlineDraw(
     ctx: CanvasRenderingContext2D,
     figure: FigureType,
-    drawFunc?: (ctx: CanvasRenderingContext2D, figure: FigureType) => void,
+    drawFunc: (ctx: CanvasRenderingContext2D, figure: FigureType) => void,
   ) {
-    if (drawFunc) {
-      const { lineWidth, fillColor, strokeColor } = figure;
-      ctx.lineWidth = lineWidth || toolState.lineWidth;
-      ctx.fillStyle = fillColor || toolState.fillColor;
-      ctx.strokeStyle = strokeColor || toolState.strokeColor;
+    const { lineWidth, fillColor, strokeColor } = figure;
+    ctx.lineWidth = lineWidth || toolState.lineWidth;
+    ctx.fillStyle = fillColor || toolState.fillColor;
+    ctx.strokeStyle = strokeColor || toolState.strokeColor;
 
-      drawFunc(ctx, figure);
+    drawFunc(ctx, figure);
 
-      ctx.fill();
-      ctx.stroke();
-      ctx.beginPath();
-    } else {
-      console.error('drawFunc is not defined');
-    }
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
   }
 }

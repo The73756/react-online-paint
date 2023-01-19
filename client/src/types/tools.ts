@@ -9,10 +9,6 @@ export enum ToolNames {
 
 export interface FigureType {
   type: ToolNames;
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
   lineWidth?: number;
   fillColor?: string;
   strokeColor?: string;
@@ -34,4 +30,28 @@ export interface CircleType extends FigureType {
   radiusY: number;
 }
 
-export type ToolType = RectType | CircleType;
+export interface LineType extends FigureType {
+  type: ToolNames.LINE;
+  x: number;
+  y: number;
+  startX: number;
+  startY: number;
+}
+
+export interface BrushType extends FigureType {
+  type: ToolNames.BRUSH;
+  x: number;
+  y: number;
+}
+
+export interface EraserType extends FigureType {
+  type: ToolNames.ERASER;
+  x: number;
+  y: number;
+}
+
+export interface EmptyToolType extends FigureType {
+  type: ToolNames.EMPTY;
+}
+
+export type ToolType = RectType | CircleType | LineType | BrushType | EraserType | EmptyToolType;

@@ -35,7 +35,7 @@ export default class Circle extends ComplexToolHandler {
     const currentHeight = e.pageY - target.offsetTop;
 
     this.radiusX = Math.abs((currentWidth - x) * 0.5);
-    this.radiusY = Math.abs((currentHeight - y) * 0.5);
+    this.radiusY = e.shiftKey ? this.radiusX : Math.abs((currentHeight - y) * 0.5);
 
     if (currentWidth >= x) {
       this.centerX = x + this.radiusX;
@@ -60,6 +60,6 @@ export default class Circle extends ComplexToolHandler {
       ctx.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI);
     };
 
-    super.draw(ctx, figure, drawCircle);
+    super.onlineDraw(ctx, figure, drawCircle);
   }
 }
