@@ -1,6 +1,8 @@
 import { CanvasType } from '../../types/canvas';
-import { ToolNames } from '../../types/tools';
+import { FigureType, ToolNames } from '../../types/tools';
 import toolState from '../../store/toolState';
+import canvasState from '../../store/canvasState';
+import CanvasState from '../../store/canvasState';
 
 export default class Tool {
   public canvas: CanvasType;
@@ -49,5 +51,25 @@ export default class Tool {
       this.canvas.onmousedown = null;
       this.canvas.onmouseup = null;
     }
+  }
+
+  public static setDrawStyle(ctx: CanvasRenderingContext2D, figure: FigureType) {
+    const { lineWidth, fillColor, strokeColor, scaleFactor } = figure;
+
+    // работает от большего к меньшему, наоборот не работает
+    if (scaleFactor) {
+      const scale =
+        CanvasState.canvasScaleFactor < 1
+          ? CanvasState.canvasScaleFactor
+          : CanvasState.canvasScaleFactor / scaleFactor;
+      toolState.setToolScaleFactor(scale);
+      console.log({ scale, scaleFactor, canvasScaleFactor: CanvasState.canvasScaleFactor });
+    }
+
+    ctx.lineWidth = lineWidth
+      ? Math.floor(lineWidth * canvasState.canvasScaleFactor)
+      : toolState.lineWidth;
+    ctx.fillStyle = fillColor || toolState.fillColor;
+    ctx.strokeStyle = strokeColor || toolState.strokeColor;
   }
 }

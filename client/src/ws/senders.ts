@@ -10,10 +10,11 @@ export const defaultSend = (method: CanvasWSMethods) => {
 
   canvasState.socket.send(
     JSON.stringify({
+      method: method,
       id: canvasState.sessionId,
       username: canvasState.username,
-      method: method,
-    }),
+      figure: {},
+    } as MessageType),
   );
 };
 
@@ -25,6 +26,7 @@ export const drawSend = (propsFigure: ToolType) => {
     JSON.stringify({
       method: CanvasWSMethods.DRAW,
       id: canvasState.sessionId,
+      username: canvasState.username,
       figure: propsFigure,
     } as MessageType),
   );

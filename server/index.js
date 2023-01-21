@@ -35,18 +35,26 @@ app.ws('/', (ws) => {
         break;
       case 'disconnect':
         broadcastConnection(ws, msg);
+        closeHandler(ws, msg);
         break;
     }
   });
+});
 
-  ws.on('close', () => {
-    if (aWss.clients.size === 0) {
-      setTimeout(() => {
-        deleteFile(ws.id);
-      }, 300000); // 5 минут
+const closeHandler = (ws, msg) => {
+  let currentRoomUsersCount = 0;
+  aWss.clients.forEach((client) => {
+    if (client.id === msg.id) {
+      currentRoomUsersCount++;
     }
   });
-});
+
+  if (currentRoomUsersCount - 1 === 0) {
+    setTimeout(() => {
+      deleteFile(ws.id);
+    }, 300000); // 5 минут
+  }
+};
 
 app.post('/image', (req, res) => {
   try {

@@ -1,7 +1,7 @@
 import { CanvasType } from '../../types/canvas';
 import { FigureType, RectType, ToolNames } from '../../types/tools';
 import ComplexToolHandler from '../handlers/ComplexToolHandler';
-import CanvasState from '../../store/canvasState';
+import toolState from '../../store/toolState';
 
 export default class Rect extends ComplexToolHandler {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -29,10 +29,10 @@ export default class Rect extends ComplexToolHandler {
       const { x, y, width, height } = figure as RectType;
 
       ctx.rect(
-        x * CanvasState.scaleFactor,
-        y * CanvasState.scaleFactor,
-        width * CanvasState.scaleFactor,
-        height * CanvasState.scaleFactor,
+        x * toolState.toolScaleFactor,
+        y * toolState.toolScaleFactor,
+        width * toolState.toolScaleFactor,
+        height * toolState.toolScaleFactor,
       );
     };
 

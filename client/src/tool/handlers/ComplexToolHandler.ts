@@ -3,6 +3,7 @@ import { FigureType, ToolType } from '../../types/tools';
 import toolState from '../../store/toolState';
 import { drawSend } from '../../ws/senders';
 import { CanvasType } from '../../types/canvas';
+import CanvasState from '../../store/canvasState';
 
 export default class ComplexToolHandler extends Tool {
   public mouseDown = false;
@@ -34,6 +35,7 @@ export default class ComplexToolHandler extends Tool {
       const currentProps = this.setCurrentProps();
       const figure: ToolType = {
         ...currentProps,
+        scaleFactor: CanvasState.canvasScaleFactor,
         lineWidth: toolState.lineWidth,
         strokeColor: toolState.strokeColor,
         fillColor: toolState.fillColor,
@@ -102,11 +104,7 @@ export default class ComplexToolHandler extends Tool {
     figure: FigureType,
     drawFunc: (ctx: CanvasRenderingContext2D, figure: FigureType) => void,
   ) {
-    const { lineWidth, fillColor, strokeColor } = figure;
-    ctx.lineWidth = lineWidth || toolState.lineWidth;
-    ctx.fillStyle = fillColor || toolState.fillColor;
-    ctx.strokeStyle = strokeColor || toolState.strokeColor;
-
+    super.setDrawStyle(ctx, figure);
     drawFunc(ctx, figure);
 
     ctx.fill();

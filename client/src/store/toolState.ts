@@ -3,6 +3,7 @@ import Tool from '../tool/main/Tool';
 
 class ToolState {
   tool: Tool | null = null;
+  toolScaleFactor = 1;
   strokeColor = '#000';
   fillColor = '#000';
   lineWidth = 1;
@@ -34,6 +35,10 @@ class ToolState {
       this.lineWidth = width;
       this.tool.lineWidth = width;
     }
+  }
+
+  public setToolScaleFactor(scaleFactor: number) {
+    this.toolScaleFactor = scaleFactor;
   }
 
   get currentToolName() {

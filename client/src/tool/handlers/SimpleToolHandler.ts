@@ -3,6 +3,7 @@ import { CanvasType } from '../../types/canvas';
 import { FigureType, ToolNames, ToolType } from '../../types/tools';
 import toolState from '../../store/toolState';
 import { drawSend } from '../../ws/senders';
+import CanvasState from '../../store/canvasState';
 
 export default class SimpleToolHandler extends Tool {
   public mouseDown = false;
@@ -12,6 +13,7 @@ export default class SimpleToolHandler extends Tool {
   private oldY = 0;
 
   public setCurrentProps: (() => ToolType) | null = null;
+  public localDrawFunc: ((e?: MouseEvent) => void) | null = null;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -28,6 +30,7 @@ export default class SimpleToolHandler extends Tool {
 
   private mouseUpHandler() {
     this.mouseDown = false;
+    this.ctx?.beginPath();
 
     drawSend({
       type: ToolNames.EMPTY,
@@ -36,15 +39,20 @@ export default class SimpleToolHandler extends Tool {
 
   private mouseDownHandler(e: MouseEvent) {
     const target = e.target as HTMLCanvasElement;
+    this.mouseDown = true;
 
     if (e.shiftKey) {
       this.oldX = e.pageX - target.offsetLeft;
       this.oldY = e.pageY - target.offsetTop;
     }
 
-    this.mouseDown = true;
-    this.ctx?.beginPath();
-    this.ctx?.moveTo(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
+    if (this.ctx) {
+      this.ctx.lineWidth = toolState.lineWidth;
+      this.ctx.fillStyle = toolState.fillColor;
+      this.ctx.strokeStyle = toolState.strokeColor;
+      this.ctx?.beginPath();
+      this.ctx?.moveTo(e.pageX - target.offsetLeft, e.pageY - target.offsetTop);
+    }
   }
 
   public mouseMoveHandler(e: MouseEvent) {
@@ -61,10 +69,17 @@ export default class SimpleToolHandler extends Tool {
     }
 
     if (this.mouseDown) {
+      if (this.localDrawFunc) {
+        this.localDrawFunc(e);
+      } else {
+        console.error('localDrawFunc is not defined');
+      }
+
       if (this.setCurrentProps) {
         const currentProps = this.setCurrentProps();
         const figure: ToolType = {
           ...currentProps,
+          scaleFactor: CanvasState.canvasScaleFactor,
           lineWidth: toolState.lineWidth,
           strokeColor: toolState.strokeColor,
         };
@@ -80,11 +95,7 @@ export default class SimpleToolHandler extends Tool {
     figure: FigureType,
     drawFunc: (ctx: CanvasRenderingContext2D, figure: FigureType) => void,
   ) {
-    const { lineWidth, fillColor, strokeColor } = figure;
-    ctx.lineWidth = lineWidth || toolState.lineWidth;
-    ctx.fillStyle = fillColor || toolState.fillColor;
-    ctx.strokeStyle = strokeColor || toolState.strokeColor;
-
+    super.setDrawStyle(ctx, figure);
     drawFunc(ctx, figure);
 
     ctx.stroke();

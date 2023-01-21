@@ -1,7 +1,7 @@
 import ComplexToolHandler from '../handlers/ComplexToolHandler';
 import { CanvasType } from '../../types/canvas';
 import { CircleType, FigureType, ToolNames } from '../../types/tools';
-import CanvasState from '../../store/canvasState';
+import toolState from '../../store/toolState';
 
 export default class Circle extends ComplexToolHandler {
   private centerX = 0;
@@ -59,10 +59,10 @@ export default class Circle extends ComplexToolHandler {
       const { x, y, radiusX, radiusY } = figure as CircleType;
 
       ctx.ellipse(
-        x * CanvasState.scaleFactor,
-        y * CanvasState.scaleFactor,
-        radiusX * CanvasState.scaleFactor,
-        radiusY * CanvasState.scaleFactor,
+        x * toolState.toolScaleFactor,
+        y * toolState.toolScaleFactor,
+        radiusX * toolState.toolScaleFactor,
+        radiusY * toolState.toolScaleFactor,
         0,
         0,
         2 * Math.PI,

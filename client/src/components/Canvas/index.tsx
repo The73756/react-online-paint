@@ -25,8 +25,6 @@ const Canvas: FC = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
-    canvasRef.current.width = canvasWrapperRef.current?.offsetWidth || 500;
-    canvasRef.current.height = canvasWrapperRef.current?.offsetHeight || 500;
     void syncCanvas();
     document.addEventListener('keypress', keyPressHandler);
     window.addEventListener('resize', resizeCanvasHandler);
@@ -74,12 +72,10 @@ const Canvas: FC = observer(() => {
       const scaleFactor = Math.min(canvasWidth / imageWidth, canvasHeight / imageHeight);
       const newWidth = imageWidth * scaleFactor;
       const newHeight = imageHeight * scaleFactor;
-      console.log({ newWidth, newHeight, canvasWidth, canvasHeight });
-
       canvas.width = newWidth;
       canvas.height = newHeight;
 
-      CanvasState.setScaleFactor(scaleFactor);
+      CanvasState.setCanvasScaleFactor(scaleFactor);
 
       ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
       ctx?.drawImage(newImage, 0, 0, newWidth, newHeight);
@@ -96,6 +92,12 @@ const Canvas: FC = observer(() => {
   const syncCanvas = async () => {
     try {
       const imageLink = await getImage(id);
+
+      if (!imageLink) {
+        canvasRef.current.width = canvasWrapperRef.current.offsetWidth;
+        canvasRef.current.height = canvasWrapperRef.current.offsetHeight - 20;
+      }
+
       resizeCanvasAction(imageLink);
     } catch (e) {
       console.log(e);
@@ -139,8 +141,9 @@ const Canvas: FC = observer(() => {
   const drawHandler = (msg: MessageType) => {
     const figure = msg.figure;
     const ctx = canvasRef.current?.getContext('2d');
+    const isMyFigure = msg.username === canvasState.username;
 
-    if (ctx) {
+    if (ctx && !isMyFigure) {
       switch (figure.type) {
         case ToolNames.BRUSH:
           Brush.draw(ctx, figure);

@@ -1,7 +1,7 @@
 import { CanvasType } from '../../types/canvas';
 import { EraserType, FigureType, ToolNames } from '../../types/tools';
 import SimpleToolHandler from '../handlers/SimpleToolHandler';
-import CanvasState from '../../store/canvasState';
+import toolState from '../../store/toolState';
 
 export default class Eraser extends SimpleToolHandler {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -17,6 +17,15 @@ export default class Eraser extends SimpleToolHandler {
       };
       return brushProps;
     };
+
+    this.localDrawFunc = () => {
+      if (this.ctx) {
+        this.ctx.globalCompositeOperation = 'destination-out';
+        this.ctx.lineTo(this.x, this.y);
+        this.ctx.stroke();
+        this.ctx.globalCompositeOperation = 'source-over';
+      }
+    };
   }
 
   public static draw = (ctx: CanvasRenderingContext2D, figure: FigureType) => {
@@ -24,7 +33,7 @@ export default class Eraser extends SimpleToolHandler {
     ctx.globalCompositeOperation = 'destination-out';
 
     super.onlineDraw(ctx, figure, () => {
-      ctx.lineTo(x * CanvasState.scaleFactor, y * CanvasState.scaleFactor);
+      ctx.lineTo(x * toolState.toolScaleFactor, y * toolState.toolScaleFactor);
     });
 
     ctx.globalCompositeOperation = 'source-over';
