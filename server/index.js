@@ -38,6 +38,14 @@ app.ws('/', (ws) => {
         break;
     }
   });
+
+  ws.on('close', () => {
+    if (aWss.clients.size === 0) {
+      setTimeout(() => {
+        deleteFile(ws.id);
+      }, 300000); // 5 минут
+    }
+  });
 });
 
 app.post('/image', (req, res) => {
@@ -48,7 +56,7 @@ app.post('/image', (req, res) => {
     return res.status(200).json({ message: 'Изображение сохранено' });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: 'Что-то пошло не так' });
+    res.status(500).json({ message: e.message });
   }
 });
 
@@ -65,13 +73,21 @@ app.get('/image', (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: 'Что-то пошло не так' });
+    res.status(500).json({ message: e.message });
   }
 });
 
 app.listen(PORT, () => {
   console.log('Привет, господин! Все системы запущены, ня❤️');
 });
+
+const deleteFile = (id) => {
+  const filePath = path.resolve(__dirname, 'static', `${id}.png`);
+
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+};
 
 const connectionHandler = (ws, msg) => {
   ws.id = msg.id;

@@ -12,4 +12,5 @@ export const disconnectHandler = () => {
 
 export const closeHandler = () => {
   toast.error('Соединение с сервером разорвано!');
+  alert('Соединение с сервером разорвано!' + ' ' + new Date().toLocaleTimeString());
 };
