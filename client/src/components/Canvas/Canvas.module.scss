@@ -3,13 +3,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 120px);
 
   &__inner {
     position: fixed;
+    top: 100px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
+
+    &:focus {
+      outline: none;
+    }
   }
 }
 

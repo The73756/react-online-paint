@@ -1,6 +1,7 @@
 import { CanvasType } from '../../types/canvas';
 import { BrushType, FigureType, ToolNames } from '../../types/tools';
 import SimpleToolHandler from '../handlers/SimpleToolHandler';
+import canvasState from '../../store/canvasState';
 
 export default class Brush extends SimpleToolHandler {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -22,7 +23,7 @@ export default class Brush extends SimpleToolHandler {
     const { x, y } = figure as BrushType;
 
     super.onlineDraw(ctx, figure, () => {
-      ctx.lineTo(x, y);
+      ctx.lineTo(x * canvasState.scaleFactor, y * canvasState.scaleFactor);
     });
   };
 }

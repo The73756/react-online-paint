@@ -15,11 +15,11 @@ import {
   LineImg,
   RectImg,
   RedoImg,
-  SaveImg,
   UndoImg,
 } from '../../assets/images/svg';
 
 import styles from './Toolbar.module.scss';
+import SaveButton from '../ui/SaveButton';
 
 const Toolbar: FC = observer(() => {
   const currentToolName = toolState.currentToolName;
@@ -29,18 +29,6 @@ const Toolbar: FC = observer(() => {
     const color = e.target.value;
 
     toolState.setFillColor(color);
-  };
-
-  const saveCanvas = () => {
-    if (canvasState.canvas) {
-      const dataUrl = canvasState.canvas.toDataURL();
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = canvasState.sessionId + '.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
   };
 
   return (
@@ -115,13 +103,7 @@ const Toolbar: FC = observer(() => {
             title="Очистить">
             <ClearImg />
           </ImgButton>
-          <ImgButton
-            className={styles.toolbar__btn}
-            aria-label="Сохранить"
-            title="Сохранить"
-            onClick={saveCanvas}>
-            <SaveImg />
-          </ImgButton>
+          <SaveButton className={styles.toolbar__btn} />
         </div>
       </div>
     </TopBar>

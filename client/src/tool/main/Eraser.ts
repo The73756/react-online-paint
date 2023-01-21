@@ -1,6 +1,7 @@
 import { CanvasType } from '../../types/canvas';
 import { EraserType, FigureType, ToolNames } from '../../types/tools';
 import SimpleToolHandler from '../handlers/SimpleToolHandler';
+import CanvasState from '../../store/canvasState';
 
 export default class Eraser extends SimpleToolHandler {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -23,7 +24,7 @@ export default class Eraser extends SimpleToolHandler {
     ctx.globalCompositeOperation = 'destination-out';
 
     super.onlineDraw(ctx, figure, () => {
-      ctx.lineTo(x, y);
+      ctx.lineTo(x * CanvasState.scaleFactor, y * CanvasState.scaleFactor);
     });
 
     ctx.globalCompositeOperation = 'source-over';

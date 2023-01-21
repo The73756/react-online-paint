@@ -1,6 +1,7 @@
 import { CanvasType } from '../../types/canvas';
 import { FigureType, RectType, ToolNames } from '../../types/tools';
 import ComplexToolHandler from '../handlers/ComplexToolHandler';
+import CanvasState from '../../store/canvasState';
 
 export default class Rect extends ComplexToolHandler {
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
@@ -27,7 +28,12 @@ export default class Rect extends ComplexToolHandler {
     const drawRect = (ctx: CanvasRenderingContext2D, figure: FigureType) => {
       const { x, y, width, height } = figure as RectType;
 
-      ctx.rect(x, y, width, height);
+      ctx.rect(
+        x * CanvasState.scaleFactor,
+        y * CanvasState.scaleFactor,
+        width * CanvasState.scaleFactor,
+        height * CanvasState.scaleFactor,
+      );
     };
 
     super.onlineDraw(ctx, figure, drawRect);

@@ -2,6 +2,7 @@ import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import canvasState from '../../store/canvasState';
+import CanvasState from '../../store/canvasState';
 import toolState from '../../store/toolState';
 import { CanvasWSMethods, MessageType } from '../../types/canvas';
 import { ToolNames } from '../../types/tools';
@@ -17,16 +18,22 @@ import styles from './Canvas.module.scss';
 const Canvas: FC = observer(() => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null) as MutableRefObject<HTMLCanvasElement>;
+  const canvasWrapperRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
   const { id } = useParams() as { id: string };
   const { username } = canvasState;
+  let canvasResizeTimer: NodeJS.Timeout;
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+    canvasRef.current.width = canvasWrapperRef.current?.offsetWidth || 500;
+    canvasRef.current.height = canvasWrapperRef.current?.offsetHeight || 500;
     void syncCanvas();
     document.addEventListener('keypress', keyPressHandler);
+    window.addEventListener('resize', resizeCanvasHandler);
 
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
+      window.removeEventListener('resize', resizeCanvasHandler);
     };
   }, []);
 
@@ -51,11 +58,45 @@ const Canvas: FC = observer(() => {
     }
   }, [username]);
 
+  const resizeCanvasAction = (imageLink: string) => {
+    const canvas = canvasRef.current;
+    const canvasWidth = canvasWrapperRef.current.offsetWidth || 400;
+    const canvasHeight = canvasWrapperRef.current.offsetHeight - 20 || 400;
+
+    const ctx = canvas.getContext('2d');
+
+    const newImage = new Image();
+    newImage.src = imageLink;
+
+    newImage.onload = () => {
+      const imageWidth = newImage.width;
+      const imageHeight = newImage.height;
+      const scaleFactor = Math.min(canvasWidth / imageWidth, canvasHeight / imageHeight);
+      const newWidth = imageWidth * scaleFactor;
+      const newHeight = imageHeight * scaleFactor;
+      console.log({ newWidth, newHeight, canvasWidth, canvasHeight });
+
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      CanvasState.setScaleFactor(scaleFactor);
+
+      ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx?.drawImage(newImage, 0, 0, newWidth, newHeight);
+    };
+  };
+
+  const resizeCanvasHandler = () => {
+    const imageLink = canvasRef.current.toDataURL();
+
+    clearTimeout(canvasResizeTimer);
+    canvasResizeTimer = setTimeout(() => resizeCanvasAction(imageLink), 100);
+  };
+
   const syncCanvas = async () => {
-    setIsImageLoading(true);
     try {
-      const imageHash = await getImage(id);
-      canvasState.rewriteCanvas(canvasRef.current, imageHash);
+      const imageLink = await getImage(id);
+      resizeCanvasAction(imageLink);
     } catch (e) {
       console.log(e);
       toast.error('Произошла ошибка при синхронизации изображения!');
@@ -145,15 +186,13 @@ const Canvas: FC = observer(() => {
   };
 
   return (
-    <div className={styles.canvas}>
+    <div className={styles.canvas} ref={canvasWrapperRef}>
       <Loader isLoading={isImageLoading} className={styles.loader} />
       <canvas
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         className={styles.canvas__inner}
         ref={canvasRef}
-        width={1170}
-        height={700}
         tabIndex={1}
       />
       <Toaster

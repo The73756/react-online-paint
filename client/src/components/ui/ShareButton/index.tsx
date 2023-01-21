@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
-import ImgButton from '../ui/ImgButton';
-import { ShareImg } from '../../assets/images/svg';
-import canvasState from '../../store/canvasState';
-import Modal from '../ui/Modal';
+import canvasState from '../../../store/canvasState';
+import { ShareImg } from '../../../assets/images/svg';
 import { Tooltip } from 'react-tooltip';
+import ImgButton from '../ImgButton';
+import Modal from '../Modal';
 
 import styles from './ShareButton.module.scss';
 

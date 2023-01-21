@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 import TopBar from '../ui/TopBar';
 import ColorPicker from '../ui/ColorPicker';
-import ShareButton from '../ShareButton';
+import ShareButton from '../ui/ShareButton';
 import toolState from '../../store/toolState';
 
 import styles from './SettingsBar.module.scss';

@@ -1,6 +1,7 @@
 import ComplexToolHandler from '../handlers/ComplexToolHandler';
 import { CanvasType } from '../../types/canvas';
 import { FigureType, LineType, ToolNames } from '../../types/tools';
+import CanvasState from '../../store/canvasState';
 
 export default class Line extends ComplexToolHandler {
   private currentX = 0;
@@ -39,8 +40,8 @@ export default class Line extends ComplexToolHandler {
     const drawLine = (ctx: CanvasRenderingContext2D, figure: FigureType) => {
       const { x, y, startX, startY } = figure as LineType;
 
-      ctx.moveTo(startX, startY);
-      ctx.lineTo(x, y);
+      ctx.moveTo(startX * CanvasState.scaleFactor, startY * CanvasState.scaleFactor);
+      ctx.lineTo(x * CanvasState.scaleFactor, y * CanvasState.scaleFactor);
     };
 
     super.onlineDraw(ctx, figure, drawLine);

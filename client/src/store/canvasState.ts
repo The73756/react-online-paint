@@ -12,6 +12,7 @@ class CanvasState {
   redoList: string[] = [];
   username = '';
   isAuth = false;
+  scaleFactor = 1;
 
   constructor() {
     makeAutoObservable(this);
@@ -55,6 +56,10 @@ class CanvasState {
 
   public requestClear() {
     defaultSend(CanvasWSMethods.CLEAR);
+  }
+
+  public setScaleFactor(index: number) {
+    this.scaleFactor = index;
   }
 
   public rewriteCanvas(canvas: CanvasType, dataUrl: string) {

@@ -1,6 +1,7 @@
 import ComplexToolHandler from '../handlers/ComplexToolHandler';
 import { CanvasType } from '../../types/canvas';
 import { CircleType, FigureType, ToolNames } from '../../types/tools';
+import CanvasState from '../../store/canvasState';
 
 export default class Circle extends ComplexToolHandler {
   private centerX = 0;
@@ -57,7 +58,15 @@ export default class Circle extends ComplexToolHandler {
     const drawCircle = (ctx: CanvasRenderingContext2D, figure: FigureType) => {
       const { x, y, radiusX, radiusY } = figure as CircleType;
 
-      ctx.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+      ctx.ellipse(
+        x * CanvasState.scaleFactor,
+        y * CanvasState.scaleFactor,
+        radiusX * CanvasState.scaleFactor,
+        radiusY * CanvasState.scaleFactor,
+        0,
+        0,
+        2 * Math.PI,
+      );
     };
 
     super.onlineDraw(ctx, figure, drawCircle);
