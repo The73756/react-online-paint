@@ -26,14 +26,17 @@ export default class Circle extends ComplexToolHandler {
     };
 
     this.localDrawFunc = (e) => {
-      this.drawCircle(this.startX, this.startY, e as MouseEvent);
+      this.drawCircle(this.startX, this.startY, e as MouseEvent | TouchEvent);
     };
   }
 
-  private drawCircle(x: number, y: number, e: MouseEvent) {
+  private drawCircle(x: number, y: number, e: MouseEvent | TouchEvent) {
     const target = e.target as HTMLCanvasElement;
-    const currentWidth = e.pageX - target.offsetLeft;
-    const currentHeight = e.pageY - target.offsetTop;
+    const pageX = 'pageX' in e ? e.pageX : e.touches[0].pageX;
+    const pageY = 'pageY' in e ? e.pageY : e.touches[0].pageY;
+
+    const currentWidth = pageX - target.offsetLeft;
+    const currentHeight = pageY - target.offsetTop;
 
     this.radiusX = Math.abs((currentWidth - x) * 0.5);
     this.radiusY = e.shiftKey ? this.radiusX : Math.abs((currentHeight - y) * 0.5);

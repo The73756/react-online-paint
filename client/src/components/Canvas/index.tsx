@@ -194,6 +194,7 @@ const Canvas: FC = observer(() => {
       <canvas
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
+        onTouchEnd={mouseUpHandler}
         className={styles.canvas__inner}
         ref={canvasRef}
         tabIndex={1}

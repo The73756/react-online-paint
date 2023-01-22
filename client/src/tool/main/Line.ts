@@ -23,14 +23,17 @@ export default class Line extends ComplexToolHandler {
     };
 
     this.localDrawFunc = (e) => {
-      this.drawLine(e as MouseEvent);
+      this.drawLine(e as MouseEvent | TouchEvent);
     };
   }
 
-  private drawLine(e: MouseEvent) {
+  private drawLine(e: MouseEvent | TouchEvent) {
     const target = e.target as HTMLCanvasElement;
-    this.currentX = e.pageX - target.offsetLeft;
-    this.currentY = e.pageY - target.offsetTop;
+    const pageX = 'pageX' in e ? e.pageX : e.touches[0].pageX;
+    const pageY = 'pageY' in e ? e.pageY : e.touches[0].pageY;
+
+    this.currentX = pageX - target.offsetLeft;
+    this.currentY = pageY - target.offsetTop;
 
     this.ctx?.moveTo(this.startX as number, this.startY as number);
     this.ctx?.lineTo(this.currentX, this.currentY);

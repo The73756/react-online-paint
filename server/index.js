@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const Wss = require('express-ws')(app);
 const aWss = Wss.getWss();
@@ -10,6 +11,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json({ limit: '30mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
 
 app.ws('/', (ws) => {
   ws.on('message', (msg) => {

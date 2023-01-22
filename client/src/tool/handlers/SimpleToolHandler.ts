@@ -13,7 +13,7 @@ export default class SimpleToolHandler extends Tool {
   private oldY = 0;
 
   public setCurrentProps: (() => ToolType) | null = null;
-  public localDrawFunc: ((e?: MouseEvent) => void) | null = null;
+  public localDrawFunc: (() => void) | null = null;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -24,11 +24,38 @@ export default class SimpleToolHandler extends Tool {
     if (this.canvas) {
       this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
       this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-      this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+      this.canvas.onmouseup = this.stopDrawingHandler.bind(this);
+
+      this.canvas.ontouchmove = this.touchMoveHandler.bind(this);
+      this.canvas.ontouchstart = this.touchStartHandler.bind(this);
+      this.canvas.ontouchend = this.stopDrawingHandler.bind(this);
     }
   }
 
-  private mouseUpHandler() {
+  private drawingHandler() {
+    if (this.mouseDown) {
+      if (this.localDrawFunc) {
+        this.localDrawFunc();
+      } else {
+        console.error('localDrawFunc is not defined');
+      }
+
+      if (this.setCurrentProps) {
+        const currentProps = this.setCurrentProps();
+        const figure: ToolType = {
+          ...currentProps,
+          scaleFactor: CanvasState.canvasScaleFactor,
+          lineWidth: toolState.lineWidth,
+          strokeColor: toolState.strokeColor,
+        };
+        drawSend(figure);
+      } else {
+        console.error('setCurrentProps is not defined');
+      }
+    }
+  }
+
+  private stopDrawingHandler() {
     this.mouseDown = false;
     this.ctx?.beginPath();
 
@@ -68,26 +95,33 @@ export default class SimpleToolHandler extends Tool {
       deltaY > 0 && deltaY > deltaX ? (this.x = this.oldX) : (this.y = this.oldY);
     }
 
-    if (this.mouseDown) {
-      if (this.localDrawFunc) {
-        this.localDrawFunc(e);
-      } else {
-        console.error('localDrawFunc is not defined');
-      }
+    this.drawingHandler();
+  }
+  private touchStartHandler(e: TouchEvent) {
+    e.preventDefault();
+    const target = e.target as HTMLCanvasElement;
+    this.mouseDown = true;
+    const pageX = e.touches[0].pageX;
+    const pageY = e.touches[0].pageY;
 
-      if (this.setCurrentProps) {
-        const currentProps = this.setCurrentProps();
-        const figure: ToolType = {
-          ...currentProps,
-          scaleFactor: CanvasState.canvasScaleFactor,
-          lineWidth: toolState.lineWidth,
-          strokeColor: toolState.strokeColor,
-        };
-        drawSend(figure);
-      } else {
-        console.error('setCurrentProps is not defined');
-      }
+    if (this.ctx) {
+      this.ctx.lineWidth = toolState.lineWidth;
+      this.ctx.fillStyle = toolState.fillColor;
+      this.ctx.strokeStyle = toolState.strokeColor;
+      this.ctx?.beginPath();
+      this.ctx?.moveTo(pageX - target.offsetLeft, pageY - target.offsetTop);
     }
+  }
+
+  private touchMoveHandler(e: TouchEvent) {
+    e.preventDefault();
+    const target = e.target as HTMLCanvasElement;
+    const pageX = e.touches[0].pageX;
+    const pageY = e.touches[0].pageY;
+    this.x = pageX - target.offsetLeft;
+    this.y = pageY - target.offsetTop;
+
+    this.drawingHandler();
   }
 
   public static onlineDraw(

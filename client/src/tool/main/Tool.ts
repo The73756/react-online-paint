@@ -49,6 +49,10 @@ export default class Tool {
       this.canvas.onmousemove = null;
       this.canvas.onmousedown = null;
       this.canvas.onmouseup = null;
+
+      this.canvas.ontouchmove = null;
+      this.canvas.ontouchstart = null;
+      this.canvas.ontouchend = null;
     }
   }
 
@@ -58,7 +62,6 @@ export default class Tool {
     const canvasScaleFactor = canvasState.canvasScaleFactor;
 
     if (scaleFactor && scaleFactor !== cachedScaleFactor) {
-      console.log(figure);
       let scale: number;
 
       if (canvasScaleFactor > 1) {
@@ -70,7 +73,7 @@ export default class Tool {
         scale =
           canvasScaleFactor < scaleFactor
             ? scaleFactor > 1
-              ? scaleFactor - scaleFactor / canvasScaleFactor
+              ? canvasScaleFactor
               : canvasScaleFactor / scaleFactor
             : canvasScaleFactor;
       }

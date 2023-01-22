@@ -13,7 +13,7 @@ export default class ComplexToolHandler extends Tool {
   public height = 0;
 
   public setCurrentProps: (() => ToolType) | null = null;
-  public localDrawFunc: ((e?: MouseEvent) => void) | null = null;
+  public localDrawFunc: ((e?: MouseEvent | TouchEvent) => void) | null = null;
 
   constructor(canvas: CanvasType, socket: WebSocket | null, sessionId: string) {
     super(canvas, socket, sessionId);
@@ -24,11 +24,15 @@ export default class ComplexToolHandler extends Tool {
     if (this.canvas) {
       this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
       this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-      this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+      this.canvas.onmouseup = this.stopDrawHandler.bind(this);
+
+      this.canvas.ontouchmove = this.touchMoveHandler.bind(this);
+      this.canvas.ontouchstart = this.touchStartHandler.bind(this);
+      this.canvas.ontouchend = this.stopDrawHandler.bind(this);
     }
   }
 
-  public mouseUpHandler() {
+  public stopDrawHandler() {
     this.mouseDown = false;
 
     if (this.setCurrentProps) {
@@ -69,7 +73,36 @@ export default class ComplexToolHandler extends Tool {
     }
   }
 
-  public localDraw(e?: MouseEvent) {
+  public touchStartHandler(e: TouchEvent) {
+    e.preventDefault();
+    const target = e.target as HTMLCanvasElement;
+    const pageX = e.touches[0].pageX;
+    const pageY = e.touches[0].pageY;
+
+    this.mouseDown = true;
+    this.ctx?.beginPath();
+    this.startX = pageX - target.offsetLeft;
+    this.startY = pageY - target.offsetTop;
+    this.saved = this.canvas?.toDataURL() as string;
+  }
+
+  public touchMoveHandler(e: TouchEvent) {
+    e.preventDefault();
+    const target = e.target as HTMLCanvasElement;
+    const pageX = e.touches[0].pageX;
+    const pageY = e.touches[0].pageY;
+
+    if (this.mouseDown) {
+      const currentX = pageX - target.offsetLeft;
+      const currentY = pageY - target.offsetTop;
+      this.width = currentX - this.startX;
+      this.height = currentY - this.startY;
+
+      this.localDraw(e);
+    }
+  }
+
+  public localDraw(e?: MouseEvent | TouchEvent) {
     const canvasWidth = this.canvas?.width as number;
     const canvasHeight = this.canvas?.height as number;
     const img = new Image();
