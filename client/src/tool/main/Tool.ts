@@ -55,15 +55,28 @@ export default class Tool {
 
   public static setDrawStyle(ctx: CanvasRenderingContext2D, figure: FigureType) {
     const { lineWidth, fillColor, strokeColor, scaleFactor } = figure;
+    const cachedScaleFactor = toolState.cachedScaleFactor;
 
-    // работает от большего к меньшему, наоборот не работает
-    if (scaleFactor) {
-      const scale =
-        CanvasState.canvasScaleFactor < 1
-          ? CanvasState.canvasScaleFactor
-          : CanvasState.canvasScaleFactor / scaleFactor;
+    if (scaleFactor && scaleFactor !== cachedScaleFactor) {
+      const canvasScaleFactor = CanvasState.canvasScaleFactor;
+      let scale: number;
+
+      if (canvasScaleFactor > 1) {
+        scale =
+          canvasScaleFactor < scaleFactor ? canvasScaleFactor / scaleFactor : canvasScaleFactor;
+      } else if (canvasScaleFactor === 1) {
+        scale = canvasScaleFactor / scaleFactor;
+      } else {
+        scale =
+          canvasScaleFactor < scaleFactor
+            ? scaleFactor > 1
+              ? scaleFactor - scaleFactor / canvasScaleFactor
+              : canvasScaleFactor / scaleFactor
+            : canvasScaleFactor;
+      }
+
+      toolState.setCachedScaleFactor(scaleFactor);
       toolState.setToolScaleFactor(scale);
-      console.log({ scale, scaleFactor, canvasScaleFactor: CanvasState.canvasScaleFactor });
     }
 
     ctx.lineWidth = lineWidth

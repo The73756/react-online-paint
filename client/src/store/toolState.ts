@@ -4,6 +4,7 @@ import Tool from '../tool/main/Tool';
 class ToolState {
   tool: Tool | null = null;
   toolScaleFactor = 1;
+  cachedScaleFactor = 0;
   strokeColor = '#000';
   fillColor = '#000';
   lineWidth = 1;
@@ -39,6 +40,10 @@ class ToolState {
 
   public setToolScaleFactor(scaleFactor: number) {
     this.toolScaleFactor = scaleFactor;
+  }
+
+  public setCachedScaleFactor(scaleFactor: number) {
+    this.cachedScaleFactor = scaleFactor;
   }
 
   get currentToolName() {
