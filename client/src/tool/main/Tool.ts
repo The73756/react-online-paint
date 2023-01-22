@@ -2,7 +2,6 @@ import { CanvasType } from '../../types/canvas';
 import { FigureType, ToolNames } from '../../types/tools';
 import toolState from '../../store/toolState';
 import canvasState from '../../store/canvasState';
-import CanvasState from '../../store/canvasState';
 
 export default class Tool {
   public canvas: CanvasType;
@@ -56,9 +55,10 @@ export default class Tool {
   public static setDrawStyle(ctx: CanvasRenderingContext2D, figure: FigureType) {
     const { lineWidth, fillColor, strokeColor, scaleFactor } = figure;
     const cachedScaleFactor = toolState.cachedScaleFactor;
+    const canvasScaleFactor = canvasState.canvasScaleFactor;
 
     if (scaleFactor && scaleFactor !== cachedScaleFactor) {
-      const canvasScaleFactor = CanvasState.canvasScaleFactor;
+      console.log(figure);
       let scale: number;
 
       if (canvasScaleFactor > 1) {
@@ -76,7 +76,7 @@ export default class Tool {
       }
 
       toolState.setCachedScaleFactor(scaleFactor);
-      toolState.setToolScaleFactor(scale);
+      toolState.setToolScaleFactor(Math.abs(scale));
     }
 
     ctx.lineWidth = lineWidth

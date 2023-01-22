@@ -27,10 +27,12 @@ const Canvas: FC = observer(() => {
     canvasState.setCanvas(canvasRef.current);
     void syncCanvas();
     document.addEventListener('keypress', keyPressHandler);
+    window.addEventListener('beforeunload', disconnectHandler);
     window.addEventListener('resize', resizeCanvasHandler);
 
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
+      window.removeEventListener('beforeunload', disconnectHandler);
       window.removeEventListener('resize', resizeCanvasHandler);
     };
   }, []);
@@ -45,13 +47,11 @@ const Canvas: FC = observer(() => {
       socket.addEventListener('open', openHandler);
       socket.addEventListener('message', socketMessageHandler);
       socket.addEventListener('close', closeHandler);
-      window.addEventListener('beforeunload', disconnectHandler);
 
       return () => {
         socket.removeEventListener('open', openHandler);
         socket.removeEventListener('message', socketMessageHandler);
         socket.removeEventListener('close', closeHandler);
-        window.removeEventListener('beforeunload', disconnectHandler);
       };
     }
   }, [username]);

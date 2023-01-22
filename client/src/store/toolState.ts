@@ -4,10 +4,10 @@ import Tool from '../tool/main/Tool';
 class ToolState {
   tool: Tool | null = null;
   toolScaleFactor = 1;
-  cachedScaleFactor = 0;
   strokeColor = '#000';
   fillColor = '#000';
   lineWidth = 1;
+  cachedScaleFactor = 0;
 
   constructor() {
     makeAutoObservable(this);
