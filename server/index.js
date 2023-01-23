@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json({ limit: '30mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
+let users = [];
 
 app.ws('/', (ws) => {
   ws.on('message', (msg) => {
@@ -45,6 +46,8 @@ app.ws('/', (ws) => {
 });
 
 const closeHandler = (ws, msg) => {
+  users = users.filter((user) => user.id === msg.id && user.username !== msg.username);
+
   let currentRoomUsersCount = 0;
   aWss.clients.forEach((client) => {
     if (client.id === msg.id) {
@@ -65,6 +68,26 @@ app.post('/image', (req, res) => {
     fs.writeFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`), data, 'base64');
 
     return res.status(200).json({ message: 'Изображение сохранено' });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: e.message });
+  }
+});
+
+app.post('/login', (req, res) => {
+  try {
+    const { username, id } = req.body;
+
+    const currentUser = users.filter((user) => user.id === id && user.username === username);
+
+    if (currentUser.length) {
+      res
+        .status(200)
+        .json({ isLogin: false, message: 'Пользователь с таким именем уже авторизован!' });
+    } else {
+      users.push({ username, id });
+      res.status(200).json({ isLogin: true, message: 'Пользователь авторизован!' });
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: e.message });
@@ -102,7 +125,9 @@ const deleteFile = (id) => {
 
 const connectionHandler = (ws, msg) => {
   ws.id = msg.id;
-  broadcastConnection(ws, msg);
+  const connectedUsers = users.filter((user) => user.id === msg.id);
+  const connectMsg = { ...msg, users: connectedUsers };
+  broadcastConnection(ws, connectMsg);
 };
 
 const broadcastConnection = (ws, msg) => {

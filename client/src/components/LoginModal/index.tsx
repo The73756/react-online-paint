@@ -1,29 +1,37 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
-import canvasState from '../../store/canvasState';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 
 import styles from './LoginModal.module.scss';
+import { loginUser } from '../../http/userApi';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import canvasState from '../../store/canvasState';
 
 const LoginModal: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localUsername, setLocalUsername] = useState('');
   const [isError, setIsError] = useState(false);
+  const { id } = useParams() as { id: string };
 
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
 
-  const connectHandler = (e?: FormEvent) => {
+  const connectHandler = async (e?: FormEvent) => {
     e?.preventDefault();
 
     if (localUsername) {
-      canvasState.setUsername(localUsername);
-      canvasState.setAuth(true);
-
-      setIsModalOpen(false);
-      setIsError(false);
-      setLocalUsername('');
+      const res = await loginUser(localUsername, id);
+      if (res.isLogin) {
+        canvasState.setUsername(localUsername);
+        canvasState.setAuth(true);
+        setIsModalOpen(false);
+        setIsError(false);
+        setLocalUsername('');
+      } else {
+        toast.error(res.message);
+      }
     } else {
       setIsError(true);
     }
@@ -32,7 +40,7 @@ const LoginModal: FC = () => {
   return (
     <Modal
       isOpen={isModalOpen}
-      onRequestClose={connectHandler}
+      onRequestClose={() => {}}
       contentLabel="Окно для подключения к комнате">
       <div className={styles.loginModalContent}>
         <h2 className={styles.loginModalContent__title}>Введите свое имя</h2>

@@ -1,4 +1,5 @@
 import { ToolType } from './tools';
+import { UserType } from './user';
 
 export type CanvasType = HTMLCanvasElement | null;
 
@@ -17,4 +18,5 @@ export interface MessageType {
   username: string;
   id: string;
   figure: ToolType;
+  users?: UserType[];
 }

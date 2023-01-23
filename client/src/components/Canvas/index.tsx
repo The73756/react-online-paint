@@ -15,6 +15,7 @@ import Tool from '../../tool/main/Tool';
 import { toast } from 'react-hot-toast';
 
 import styles from './Canvas.module.scss';
+import usersState from '../../store/usersState';
 
 const Canvas: FC = observer(() => {
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -115,6 +116,10 @@ const Canvas: FC = observer(() => {
 
     switch (parsedMsg.method) {
       case CanvasWSMethods.CONNECT:
+        if (parsedMsg.users) {
+          usersState.setUsers(parsedMsg.users);
+          console.log(parsedMsg.users);
+        }
         const string =
           parsedMsg.username === canvasState.username
             ? 'Подключено'
