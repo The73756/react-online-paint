@@ -60,7 +60,7 @@ const Canvas: FC = observer(() => {
   const resizeCanvasAction = (imageLink: string) => {
     const canvas = canvasRef.current;
     const canvasWidth = canvasWrapperRef.current.offsetWidth || 400;
-    const canvasHeight = canvasWrapperRef.current.offsetHeight - 20 || 400;
+    const canvasHeight = canvasWrapperRef.current.offsetHeight || 400;
 
     const ctx = canvas.getContext('2d');
 
@@ -97,7 +97,8 @@ const Canvas: FC = observer(() => {
 
       if (!imageLink) {
         canvasRef.current.width = canvasWrapperRef.current.offsetWidth;
-        canvasRef.current.height = canvasWrapperRef.current.offsetHeight - 20;
+        canvasRef.current.height = canvasWrapperRef.current.offsetHeight;
+        return;
       }
 
       resizeCanvasAction(imageLink);

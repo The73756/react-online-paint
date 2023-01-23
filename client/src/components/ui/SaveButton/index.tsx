@@ -17,11 +17,13 @@ const SaveButton: FC<SaveButtonProps> = ({ className }) => {
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
 
-    return document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 's' && e.ctrlKey) {
+    if (e.ctrlKey && e.code === 'KeyS') {
       e.preventDefault();
       openModal();
     }
@@ -33,7 +35,7 @@ const SaveButton: FC<SaveButtonProps> = ({ className }) => {
       const currentFilename = filename ? filename : canvasState.sessionId;
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = currentFilename + 'png';
+      a.download = currentFilename + '.png';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
