@@ -17,9 +17,9 @@ import {
   RedoImg,
   UndoImg,
 } from '../../assets/images/svg';
+import SaveButton from '../ui/SaveButton';
 
 import styles from './Toolbar.module.scss';
-import SaveButton from '../ui/SaveButton';
 
 const Toolbar: FC = observer(() => {
   const currentToolName = toolState.currentToolName;

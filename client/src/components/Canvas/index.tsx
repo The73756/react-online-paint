@@ -12,7 +12,7 @@ import { closeHandler, disconnectHandler, openHandler } from '../../ws/handlers'
 import { getImage, updateImage } from '../../http/imageApi';
 import Loader from '../ui/Loader';
 import Tool from '../../tool/main/Tool';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 import styles from './Canvas.module.scss';
 
@@ -202,14 +202,6 @@ const Canvas: FC = observer(() => {
         className={styles.canvas__inner}
         ref={canvasRef}
         tabIndex={1}
-      />
-      <Toaster
-        position="bottom-right"
-        toastOptions={{
-          style: {
-            fontSize: 18,
-          },
-        }}
       />
     </div>
   );

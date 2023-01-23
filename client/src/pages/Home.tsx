@@ -2,6 +2,7 @@ import Toolbar from '../components/Toolbar';
 import SettingsBar from '../components/SettingsBar';
 import Canvas from '../components/Canvas';
 import LoginModal from '../components/LoginModal';
+import { Toaster } from 'react-hot-toast';
 
 const Home = () => {
   return (
@@ -12,6 +13,14 @@ const Home = () => {
         <Canvas />
       </div>
       <LoginModal />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontSize: 18,
+          },
+        }}
+      />
     </>
   );
 };

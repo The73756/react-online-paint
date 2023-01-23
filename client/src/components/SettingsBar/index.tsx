@@ -3,11 +3,14 @@ import TopBar from '../ui/TopBar';
 import ColorPicker from '../ui/ColorPicker';
 import ShareButton from '../ui/ShareButton';
 import toolState from '../../store/toolState';
+import Button from '../ui/Button';
 
 import styles from './SettingsBar.module.scss';
+import UsersList from '../UsersList';
 
 const SettingsBar: FC = () => {
   const [value, setValue] = useState(1);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = Number(e.target.value);
@@ -51,8 +54,10 @@ const SettingsBar: FC = () => {
         </div>
         <div className={styles.settingBar__group}>
           <ShareButton />
+          <Button onClick={() => setIsDrawerOpen(true)}>Пользователи</Button>
         </div>
       </div>
+      <UsersList onClose={() => setIsDrawerOpen(false)} isOpen={isDrawerOpen} />
     </TopBar>
   );
 };
