@@ -56,30 +56,32 @@ export default class Tool {
     }
   }
 
+  public static calcScaleFactor(canvasScaleFactor: number, scaleFactor: number) {
+    let scale: number;
+
+    if (canvasScaleFactor > 1) {
+      scale = canvasScaleFactor < scaleFactor ? canvasScaleFactor / scaleFactor : canvasScaleFactor;
+    } else if (canvasScaleFactor === 1) {
+      scale = canvasScaleFactor / scaleFactor;
+    } else {
+      scale =
+        canvasScaleFactor < scaleFactor
+          ? scaleFactor > 1
+            ? canvasScaleFactor
+            : canvasScaleFactor / scaleFactor
+          : canvasScaleFactor;
+    }
+
+    toolState.setToolScaleFactor(Math.abs(scale));
+  }
+
   public static setDrawStyle(ctx: CanvasRenderingContext2D, figure: FigureType) {
     const { lineWidth, fillColor, strokeColor, scaleFactor } = figure;
     const cachedScaleFactor = toolState.cachedScaleFactor;
-    const canvasScaleFactor = canvasState.canvasScaleFactor;
 
     if (scaleFactor && scaleFactor !== cachedScaleFactor) {
-      let scale: number;
-
-      if (canvasScaleFactor > 1) {
-        scale =
-          canvasScaleFactor < scaleFactor ? canvasScaleFactor / scaleFactor : canvasScaleFactor;
-      } else if (canvasScaleFactor === 1) {
-        scale = canvasScaleFactor / scaleFactor;
-      } else {
-        scale =
-          canvasScaleFactor < scaleFactor
-            ? scaleFactor > 1
-              ? canvasScaleFactor
-              : canvasScaleFactor / scaleFactor
-            : canvasScaleFactor;
-      }
-
+      Tool.calcScaleFactor(canvasState.canvasScaleFactor, scaleFactor);
       toolState.setCachedScaleFactor(scaleFactor);
-      toolState.setToolScaleFactor(Math.abs(scale));
     }
 
     ctx.lineWidth = lineWidth

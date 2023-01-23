@@ -2,8 +2,8 @@ import { FC, useState } from 'react';
 import canvasState from '../../../store/canvasState';
 import { ShareImg } from '../../../assets/images/svg';
 import { Tooltip } from 'react-tooltip';
-import ImgButton from '../ImgButton';
 import Modal from '../Modal';
+import Button from '../Button';
 
 import styles from './ShareButton.module.scss';
 
@@ -32,11 +32,11 @@ const ShareButton: FC = () => {
 
   return (
     <>
-      <ImgButton onClick={() => setIsModalOpen(true)}>
+      <Button onClick={() => setIsModalOpen(true)}>
         <span className={styles.shareButton}>
           Поделиться <ShareImg className={styles.shareButton__img} />
         </span>
-      </ImgButton>
+      </Button>
       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
         <div className={styles.shareModal}>
           <h2>Поделиться </h2>
@@ -60,9 +60,13 @@ const ShareButton: FC = () => {
             anchorId="tooltip2"
             content={isLinkCopied ? 'Скопировано' : 'Нажмите что бы скопировать'}
           />
-          <button className={styles.shareModal__btn} type="submit" onClick={closeModal}>
+          <Button
+            variant="danger"
+            className={styles.shareModal__btn}
+            type="submit"
+            onClick={closeModal}>
             Отмена
-          </button>
+          </Button>
         </div>
       </Modal>
     </>

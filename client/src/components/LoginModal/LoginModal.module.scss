@@ -24,22 +24,14 @@
   }
 
   &__btn {
-    border: 1px solid var(--light-gray-color);
+    margin-left: auto;
     border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-    transition: background-color var(--transition);
-
-    &:hover {
-      background-color: var(--light-gray-color);
-    }
-
-    @extend .btn-reset;
+    padding: 10px 12px;
   }
 }
 
 .error {
-  border-color: #f00;
+  border-color: var(--danger-color);
   animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 

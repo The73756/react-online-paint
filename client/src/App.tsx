@@ -1,6 +1,7 @@
-import './scss/main.scss';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+
+import './scss/main.scss';
 
 const sessionId = `${(+new Date()).toString(16)}`;
 

@@ -1,6 +1,7 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import canvasState from '../../store/canvasState';
 import Modal from '../ui/Modal';
+import Button from '../ui/Button';
 
 import styles from './LoginModal.module.scss';
 
@@ -45,9 +46,9 @@ const LoginModal: FC = () => {
               setLocalUsername(e.target.value);
             }}
           />
-          <button className={styles.loginModalContent__btn} type="submit">
+          <Button className={styles.loginModalContent__btn} type="submit" variant="success">
             Войти
-          </button>
+          </Button>
         </form>
       </div>
     </Modal>

@@ -1,0 +1,42 @@
+@import '../../../scss/reset';
+
+.saveModal {
+  display: flex;
+  flex-direction: column;
+
+  &__subtitle {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  &__inputBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+    gap: 10px;
+  }
+
+  &__nameInput {
+    flex: 1 1 auto;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 5px;
+    padding: 11px 20px;
+
+    @extend .input-reset;
+  }
+
+  &__btn {
+    padding: 10px 12px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  &__buttonBlock {
+    display: flex;
+    margin-left: auto;
+  }
+}

@@ -1,1 +1,14 @@
 @import 'react-tooltip/dist/react-tooltip.css';
+
+/* ClassNames for react-modal */
+
+.ReactModal__Body--open,
+.ReactModal__Html--open {
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  overscroll-behavior: none;
+}

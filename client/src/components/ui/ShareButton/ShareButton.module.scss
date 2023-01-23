@@ -1,5 +1,3 @@
-@import '../../../scss/reset';
-
 .shareButton {
   display: flex;
   align-items: center;
@@ -34,17 +32,11 @@
     padding: 10px;
     font-size: 16px;
     background-color: #eee;
-
-    @extend .btn-reset;
   }
 
   &__btn {
     margin-top: 10px;
     margin-left: auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 8px 10px;
-
-    @extend .btn-reset;
+    padding: 10px 12px;
   }
 }

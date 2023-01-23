@@ -1,10 +1,10 @@
 @import '../../../scss/reset';
 
-.imgBtn {
+.btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--light-gray-color);
+  border: 1px solid transparent;
   border-radius: 5px;
   padding: 5px;
   transition: border-color var(--transition), transform var(--transition),
@@ -16,6 +16,19 @@
   }
 
   @extend .btn-reset;
+}
+
+.default {
+  border-color: var(--light-gray-color);
+  background-color: transparent;
+}
+
+.danger {
+  border-color: var(--danger-color);
+}
+
+.success {
+  border-color: var(--success-color);
 }
 
 .active {

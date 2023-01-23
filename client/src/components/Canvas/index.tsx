@@ -11,6 +11,7 @@ import { defaultSend } from '../../ws/senders';
 import { closeHandler, disconnectHandler, openHandler } from '../../ws/handlers';
 import { getImage, updateImage } from '../../http/imageApi';
 import Loader from '../ui/Loader';
+import Tool from '../../tool/main/Tool';
 import { toast, Toaster } from 'react-hot-toast';
 
 import styles from './Canvas.module.scss';
@@ -76,6 +77,7 @@ const Canvas: FC = observer(() => {
       canvas.height = newHeight;
 
       CanvasState.setCanvasScaleFactor(scaleFactor);
+      Tool.calcScaleFactor(scaleFactor, toolState.cachedScaleFactor);
 
       ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
       ctx?.drawImage(newImage, 0, 0, newWidth, newHeight);
@@ -193,6 +195,7 @@ const Canvas: FC = observer(() => {
       <Loader isLoading={isImageLoading} className={styles.loader} />
       <canvas
         onMouseDown={mouseDownHandler}
+        onTouchStart={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         onTouchEnd={mouseUpHandler}
         className={styles.canvas__inner}
