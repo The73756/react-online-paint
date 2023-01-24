@@ -16,6 +16,10 @@
       outline: none;
     }
   }
+
+  @media (max-width: (576px)) {
+    height: 75vh;
+  }
 }
 
 .loader {

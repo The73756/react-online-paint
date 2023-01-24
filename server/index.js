@@ -87,9 +87,7 @@ app.post('/login', (req, res) => {
     const currentUser = users.filter((user) => user.id === id && user.username === username);
 
     if (currentUser.length) {
-      res
-        .status(200)
-        .json({ isLogin: false, message: 'Пользователь с таким именем уже авторизован!' });
+      res.status(401).json({ message: 'Пользователь с таким именем уже есть!' });
       return;
     }
 

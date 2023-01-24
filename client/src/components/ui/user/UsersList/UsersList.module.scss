@@ -11,9 +11,19 @@
     margin-bottom: 20px;
 
     @extend .header-reset;
+
+    @media (max-width: (576px)) {
+      margin-bottom: 20px;
+      font-size: 22px;
+      text-align: center;
+    }
   }
 }
 
 .drawer {
   width: 350px;
+
+  @media (max-width: (576px)) {
+    width: 250px;
+  }
 }

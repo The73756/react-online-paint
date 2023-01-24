@@ -4,10 +4,10 @@ import Button from '../ui/buttons/Button';
 import { loginUser } from '../../http/userApi';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import canvasState from '../../store/canvasState';
-import usersState from '../../store/usersState';
 
 import styles from './LoginModal.module.scss';
+import canvasState from '../../store/canvasState';
+import usersState from '../../store/usersState';
 
 const LoginModal: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,19 +23,27 @@ const LoginModal: FC = () => {
     e?.preventDefault();
 
     if (localUsername) {
-      const res = await loginUser(localUsername, id);
-      if (res.isLogin) {
-        canvasState.setUsername(localUsername);
-        canvasState.setAuth(true);
-        usersState.setUsers(res.users);
-        toast.success('Подключено');
-        console.log(res.users);
-        setIsModalOpen(false);
-        setIsError(false);
-        setLocalUsername('');
-      } else {
-        toast.error(res.message);
-      }
+      const response = await toast.promise(
+        loginUser(localUsername, id),
+        {
+          loading: 'Загрузка...',
+          success: <span>Подключено</span>,
+          error: (err) => <span>{err.response.data.message}</span>,
+        },
+        {
+          style: {
+            width: '250px',
+          },
+        },
+      );
+
+      canvasState.setUsername(localUsername);
+      canvasState.setAuth(true);
+      usersState.setUsers(response.users);
+
+      setIsModalOpen(false);
+      setIsError(false);
+      setLocalUsername('');
     } else {
       setIsError(true);
     }
