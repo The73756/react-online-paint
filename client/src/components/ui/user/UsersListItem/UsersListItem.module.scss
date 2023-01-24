@@ -1,8 +1,9 @@
 .usersListItem {
-  border: 1px solid var(--light-gray-color);
+  border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px 10px;
   width: 100%;
+  font-size: 16px;
 
   &:not(:last-child) {
     margin-bottom: 10px;
@@ -11,5 +12,6 @@
   &__desc {
     margin: 0;
     padding: 0;
+    text-align: center;
   }
 }

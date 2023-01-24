@@ -46,7 +46,7 @@ app.ws('/', (ws) => {
 });
 
 const closeHandler = (ws, msg) => {
-  users = users.filter((user) => user.id === msg.id && user.username !== msg.username);
+  deleteUser(msg);
 
   let currentRoomUsersCount = 0;
   aWss.clients.forEach((client) => {
@@ -60,6 +60,13 @@ const closeHandler = (ws, msg) => {
       deleteFile(ws.id);
     }, 300000); // 5 минут
   }
+};
+
+const deleteUser = (msg) => {
+  const currentUserIndex = users.findIndex(
+    (user) => user.id === msg.id && user.username === msg.username,
+  );
+  users.splice(currentUserIndex, 1);
 };
 
 app.post('/image', (req, res) => {
@@ -77,17 +84,19 @@ app.post('/image', (req, res) => {
 app.post('/login', (req, res) => {
   try {
     const { username, id } = req.body;
-
     const currentUser = users.filter((user) => user.id === id && user.username === username);
 
     if (currentUser.length) {
       res
         .status(200)
         .json({ isLogin: false, message: 'Пользователь с таким именем уже авторизован!' });
-    } else {
-      users.push({ username, id });
-      res.status(200).json({ isLogin: true, message: 'Пользователь авторизован!' });
+      return;
     }
+
+    users.push({ username, id });
+    const connectedUsers = users.filter((user) => user.id === id);
+    const response = { isLogin: true, message: 'Подключено', users: connectedUsers };
+    res.status(200).json(response);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: e.message });
@@ -125,9 +134,7 @@ const deleteFile = (id) => {
 
 const connectionHandler = (ws, msg) => {
   ws.id = msg.id;
-  const connectedUsers = users.filter((user) => user.id === msg.id);
-  const connectMsg = { ...msg, users: connectedUsers };
-  broadcastConnection(ws, connectMsg);
+  broadcastConnection(ws, msg);
 };
 
 const broadcastConnection = (ws, msg) => {

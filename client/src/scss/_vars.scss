@@ -17,4 +17,8 @@
   // components
   --toolbar-height: 40px;
   --button-shadow: 2px 2px 4px 0 rgb(34 60 80 / 20%);
+
+  @media (max-width: (576px)) {
+    --container-offset: 8px;
+  }
 }

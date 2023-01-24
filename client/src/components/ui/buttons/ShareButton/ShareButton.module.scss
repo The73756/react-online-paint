@@ -1,3 +1,5 @@
+@import '../../../../scss/reset';
+
 .shareButton {
   display: flex;
   align-items: center;
@@ -13,6 +15,13 @@
   display: flex;
   flex-direction: column;
 
+  &__title {
+    margin-bottom: 20px;
+    text-align: center;
+
+    @extend .header-reset;
+  }
+
   &__group {
     display: flex;
     align-items: center;
@@ -23,6 +32,14 @@
     &:not(:last-child) {
       margin-bottom: 10px;
     }
+
+    @media (max-width: (768px)) {
+      flex-direction: column;
+    }
+
+    @media (max-width: (576px)) {
+      text-align: center;
+    }
   }
 
   &__link {
@@ -32,6 +49,14 @@
     padding: 10px;
     font-size: 16px;
     background-color: #eee;
+
+    @media (max-width: (768px)) {
+      width: 100%;
+    }
+
+    @media (max-width: (576px)) {
+      font-size: 14px;
+    }
   }
 
   &__btn {

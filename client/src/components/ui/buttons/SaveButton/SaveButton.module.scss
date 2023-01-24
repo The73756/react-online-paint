@@ -1,12 +1,28 @@
-@import '../../../scss/reset';
+@import '../../../../scss/reset';
 
 .saveModal {
   display: flex;
   flex-direction: column;
 
+  &__title {
+    margin-bottom: 20px;
+    text-align: center;
+
+    @extend .header-reset;
+
+    @media (max-width: (576px)) {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+  }
+
   &__subtitle {
     display: block;
     margin-bottom: 10px;
+
+    @media (max-width: (576px)) {
+      text-align: center;
+    }
   }
 
   &__inputBlock {

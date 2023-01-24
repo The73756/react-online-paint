@@ -1,4 +1,4 @@
-@import '../../../scss/reset';
+@import '../../../../scss/reset';
 
 .btn {
   display: flex;
@@ -10,9 +10,11 @@
   transition: border-color var(--transition), transform var(--transition),
     box-shadow var(--transition);
 
-  &:hover {
-    box-shadow: var(--button-shadow);
-    transform: translateY(-1px);
+  @media (any-hover: hover) {
+    &:hover {
+      box-shadow: var(--button-shadow);
+      transform: translateY(-1px);
+    }
   }
 
   @extend .btn-reset;

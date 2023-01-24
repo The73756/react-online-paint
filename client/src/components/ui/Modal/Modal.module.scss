@@ -42,4 +42,11 @@
       opacity: 0;
     }
   }
+
+  @media (max-width: (768px)) {
+    padding: 12px;
+    width: 100%;
+    min-width: 0;
+    max-width: 75vw;
+  }
 }

@@ -10,7 +10,7 @@ const UsersListItem: FC<UsersListItemProps> = ({ username }) => {
   return (
     <div className={styles.usersListItem}>
       <p className={styles.usersListItem__desc}>{username}</p>
-      <p className={styles.usersListItem__desc}>Активен</p>
+      <span className={styles.usersListItem__circle}></span>
     </div>
   );
 };

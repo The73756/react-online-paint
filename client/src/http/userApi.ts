@@ -1,8 +1,10 @@
 import { $host } from './index';
+import { UserType } from '../types/user';
 
 interface LoginResponseType {
   isLogin: boolean;
   message: string;
+  users: UserType[];
 }
 
 export const loginUser = async (username: string, id: string): Promise<LoginResponseType> => {
@@ -11,6 +13,6 @@ export const loginUser = async (username: string, id: string): Promise<LoginResp
     return data;
   } catch (e) {
     console.log(e);
-    return { isLogin: false, message: 'Произошла ошибка при авторизации!' };
+    return { isLogin: false, message: 'Произошла ошибка при авторизации!', users: [] };
   }
 };

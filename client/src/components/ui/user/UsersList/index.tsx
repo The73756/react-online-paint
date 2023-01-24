@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import UsersListItem from '../ui/UsersListItem';
-import Drawer from 'react-modern-drawer';
-import styles from './UsersList.module.scss';
-import usersState from '../../store/usersState';
 import { observer } from 'mobx-react-lite';
+import Drawer from 'react-modern-drawer';
+import usersState from '../../../../store/usersState';
+import UsersListItem from '../UsersListItem';
+
+import styles from './UsersList.module.scss';
 
 interface UsersListProps {
   isOpen: boolean;

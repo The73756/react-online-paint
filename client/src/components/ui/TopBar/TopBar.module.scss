@@ -10,4 +10,9 @@
   &__inner {
     width: 100%;
   }
+
+  @media (max-width: (576px)) {
+    padding: 8px 0;
+    height: auto;
+  }
 }

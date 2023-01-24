@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import canvasState from '../../../store/canvasState';
-import { ShareImg } from '../../../assets/images/svg';
+import canvasState from '../../../../store/canvasState';
+import { ShareImg } from '../../../../assets/images/svg';
 import { Tooltip } from 'react-tooltip';
-import Modal from '../Modal';
+import Modal from '../../Modal';
 import Button from '../Button';
 
 import styles from './ShareButton.module.scss';
@@ -39,7 +39,7 @@ const ShareButton: FC = () => {
       </Button>
       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
         <div className={styles.shareModal}>
-          <h2>Поделиться </h2>
+          <h2 className={styles.shareModal__title}>Поделиться </h2>
           <p className={styles.shareModal__group}>
             Что бы друг подключился отправьте ему этот код:
             <button id="tooltip1" className={styles.shareModal__link} onClick={copyId}>

@@ -8,6 +8,7 @@ import { ReactComponent as UndoImg } from './undo.svg';
 import { ReactComponent as SaveImg } from './save.svg';
 import { ReactComponent as ClearImg } from './clear.svg';
 import { ReactComponent as ShareImg } from './share.svg';
+import { ReactComponent as UserImg } from './user.svg';
 
 export {
   BrushImg,
@@ -20,4 +21,5 @@ export {
   SaveImg,
   ClearImg,
   ShareImg,
+  UserImg,
 };

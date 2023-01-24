@@ -11,5 +11,13 @@ class UsersState {
   public setUsers(users: UserType[]) {
     this.users = users;
   }
+
+  public addUser(user: UserType) {
+    this.users.push(user);
+  }
+
+  public removeUser(user: UserType) {
+    this.users = this.users.filter((u) => u.username !== user.username);
+  }
 }
 export default new UsersState();

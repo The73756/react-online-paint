@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import TopBar from '../ui/TopBar';
-import Button from '../ui/Button';
+import Button from '../ui/buttons/Button';
 import ColorPicker from '../ui/ColorPicker';
 import { Brush, Circle, Eraser, Line, Rect } from '../../tool';
 import { ToolNames } from '../../types/tools';
@@ -17,7 +17,7 @@ import {
   RedoImg,
   UndoImg,
 } from '../../assets/images/svg';
-import SaveButton from '../ui/SaveButton';
+import SaveButton from '../ui/buttons/SaveButton';
 
 import styles from './Toolbar.module.scss';
 

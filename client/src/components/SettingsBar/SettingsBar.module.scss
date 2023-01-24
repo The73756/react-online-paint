@@ -9,6 +9,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+
+    @media (max-width: (576px)) {
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &__input {

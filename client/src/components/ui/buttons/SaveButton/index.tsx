@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import canvasState from '../../../store/canvasState';
-import { SaveImg } from '../../../assets/images/svg';
+import canvasState from '../../../../store/canvasState';
+import { SaveImg } from '../../../../assets/images/svg';
 import Button from '../Button';
-import Modal from '../Modal';
+import Modal from '../../Modal';
 
 import styles from './SaveButton.module.scss';
 
@@ -59,7 +59,7 @@ const SaveButton: FC<SaveButtonProps> = ({ className }) => {
 
       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
         <div className={styles.saveModal}>
-          <h2>Сохранить</h2>
+          <h2 className={styles.saveModal__title}>Сохранить</h2>
           <label htmlFor="nameInput" className={styles.saveModal__subtitle}>
             Введите название файла или оставьте пустым для использования названия по умолчанию
           </label>

@@ -10,5 +10,12 @@
   &__btns {
     display: flex;
     gap: 10px;
+
+    @media (max-width: (576px)) {
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
   }
 }

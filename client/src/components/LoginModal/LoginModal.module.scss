@@ -9,6 +9,11 @@
     font-size: 28px;
     text-align: center;
 
+    @media (max-width: (576px)) {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
     @extend .header-reset;
   }
 

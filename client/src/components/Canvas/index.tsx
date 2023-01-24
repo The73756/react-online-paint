@@ -116,15 +116,10 @@ const Canvas: FC = observer(() => {
 
     switch (parsedMsg.method) {
       case CanvasWSMethods.CONNECT:
-        if (parsedMsg.users) {
-          usersState.setUsers(parsedMsg.users);
-          console.log(parsedMsg.users);
+        if (parsedMsg.username !== canvasState.username) {
+          usersState.addUser({ id: parsedMsg.id, username: parsedMsg.username });
+          toast.success(`Пользователь ${parsedMsg.username} подключился`);
         }
-        const string =
-          parsedMsg.username === canvasState.username
-            ? 'Подключено'
-            : `Пользователь ${parsedMsg.username} подключился`;
-        toast.success(string);
         break;
       case CanvasWSMethods.DRAW:
         drawHandler(parsedMsg);
@@ -142,7 +137,10 @@ const Canvas: FC = observer(() => {
         canvasState.clearCanvas();
         break;
       case CanvasWSMethods.DISCONNECT:
-        toast.error(`Пользователь ${parsedMsg.username} отключился`);
+        if (parsedMsg.username !== canvasState.username) {
+          usersState.removeUser({ id: parsedMsg.id, username: parsedMsg.username });
+          toast.error(`Пользователь ${parsedMsg.username} отключился`);
+        }
     }
   };
 
