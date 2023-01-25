@@ -13,7 +13,12 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json({ limit: '30mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
+
 let users = [];
+
+app.listen(PORT, () => {
+  console.log('Server started on port ' + PORT);
+});
 
 app.ws('/', (ws) => {
   ws.on('message', (msg) => {
@@ -44,30 +49,6 @@ app.ws('/', (ws) => {
     }
   });
 });
-
-const closeHandler = (ws, msg) => {
-  deleteUser(msg);
-
-  let currentRoomUsersCount = 0;
-  aWss.clients.forEach((client) => {
-    if (client.id === msg.id) {
-      currentRoomUsersCount++;
-    }
-  });
-
-  if (currentRoomUsersCount - 1 === 0) {
-    setTimeout(() => {
-      deleteFile(ws.id);
-    }, 300000); // 5 минут
-  }
-};
-
-const deleteUser = (msg) => {
-  const currentUserIndex = users.findIndex(
-    (user) => user.id === msg.id && user.username === msg.username,
-  );
-  users.splice(currentUserIndex, 1);
-};
 
 app.post('/image', (req, res) => {
   try {
@@ -118,10 +99,6 @@ app.get('/image', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log('Привет, господин! Все системы запущены, ня❤️');
-});
-
 const deleteFile = (id) => {
   const filePath = path.resolve(__dirname, 'static', `${id}.png`);
 
@@ -141,4 +118,28 @@ const broadcastConnection = (ws, msg) => {
       client.send(JSON.stringify(msg));
     }
   });
+};
+
+const closeHandler = (ws, msg) => {
+  deleteUser(msg);
+
+  let currentRoomUsersCount = 0;
+  aWss.clients.forEach((client) => {
+    if (client.id === msg.id) {
+      currentRoomUsersCount++;
+    }
+  });
+
+  if (currentRoomUsersCount - 1 === 0) {
+    setTimeout(() => {
+      deleteFile(ws.id);
+    }, 300000); // 5 минут
+  }
+};
+
+const deleteUser = (msg) => {
+  const currentUserIndex = users.findIndex(
+    (user) => user.id === msg.id && user.username === msg.username,
+  );
+  users.splice(currentUserIndex, 1);
 };
