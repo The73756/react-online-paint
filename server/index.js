@@ -74,7 +74,7 @@ app.post('/login', (req, res) => {
 
     users.push({ username, id });
     const connectedUsers = users.filter((user) => user.id === id);
-    const response = { isLogin: true, message: 'Подключено', users: connectedUsers };
+    const response = { message: 'Подключено', users: connectedUsers };
     res.status(200).json(response);
   } catch (e) {
     console.log(e);

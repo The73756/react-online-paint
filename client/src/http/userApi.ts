@@ -2,7 +2,6 @@ import { $host } from './index';
 import { UserType } from '../types/user';
 
 interface LoginResponseType {
-  isLogin: boolean;
   message: string;
   users: UserType[];
 }
