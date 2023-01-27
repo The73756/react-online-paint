@@ -26,9 +26,9 @@
 
 ## How to run:
 
-1. npm install (server + client)
-2. npm run dev - start server
-3. npm start - start client
+1. `npm install` - (server + client)
+2. `npm run dev` - start server
+3. `npm start` - start client
 
 ## Comment:
 
