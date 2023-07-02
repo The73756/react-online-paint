@@ -20,7 +20,7 @@ app.listen(PORT, () => {
   console.log('Server started on port ' + PORT);
 });
 
-app.ws('/', (ws) => {
+app.ws('/api/', (ws) => {
   ws.on('message', (msg) => {
     msg = JSON.parse(msg);
     switch (msg.method) {
@@ -50,7 +50,7 @@ app.ws('/', (ws) => {
   });
 });
 
-app.post('/image', (req, res) => {
+app.post('/api/image', (req, res) => {
   try {
     const data = req.body.img.replace(`data:image/png;base64,`, '');
     fs.writeFileSync(path.resolve(__dirname, 'static', `${req.query.id}.png`), data, 'base64');
@@ -62,7 +62,7 @@ app.post('/image', (req, res) => {
   }
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   try {
     const { username, id } = req.body;
     const currentUser = users.filter((user) => user.id === id && user.username === username);
@@ -82,7 +82,7 @@ app.post('/login', (req, res) => {
   }
 });
 
-app.get('/image', (req, res) => {
+app.get('/api/image', (req, res) => {
   const filePath = path.resolve(__dirname, 'static', `${req.query.id}.png`);
 
   try {
